@@ -23,29 +23,28 @@ import net.minedevhd.mineutil.utils.ModButton;
 import net.minedevhd.mineutil.utils.ModButton.API;
 import net.minedevhd.mineutil.utils.RenderUtils;
 
-public class CleanCraftOreGui extends GuiScreen {
+public class CleanCraftGlassGui extends GuiScreen {
 	
     GuiButton cleanSpawnerButton,
     		  cleanChestInventoryButton,
-    		  
-    		  craftCoalBlockButton,
-    		  craftLapisBlockButton,
-    		  craftRedstoneBlockButton,
-    		  craftIronBlockButton,
-    		  craftGoldIngotButton,
-    		  craftGoldBlockButton,
-    		  craftDiamondBlockButton,
-    		  craftEmeraldBlockButton,
-    		  
-    		  craftCoalButton,
-    		  craftLapisButton,
-    		  craftRedstoneButton,
-    		  craftIronButton,
-    		  craftGoldNuggetButton,
-    		  craftGoldButton,
-    		  craftDiamondButton,
-    		  craftEmeraldButton,
-	  
+
+			  craftGlassBlackButton,
+			  craftGlassRedButton,
+			  craftGlassGreenButton,
+			  craftGlassBrownButton,
+			  craftGlassBlueButton,
+			  craftGlassVioletButton,
+			  craftGlassTurquoiseButton,
+			  craftGlassLightGreyButton,
+			  craftGlassGreyButton,
+			  craftGlassPinkButton,
+			  craftGlassLightGreenButton,
+			  craftGlassYellowButton,
+			  craftGlassLightBlueButton,
+			  craftGlassMagentaButton,
+			  craftGlassOrangeButton,
+			  craftGlassButton,
+
 			  pageNextButton,
 			  pagePrevButton,
 			  closeButton,
@@ -53,7 +52,7 @@ public class CleanCraftOreGui extends GuiScreen {
 			  deactivateButton,
 			  changeLogButton;
     
-    public CleanCraftOreGui() {
+    public CleanCraftGlassGui() {
     /**
         Sort list:
           > Ore
@@ -75,11 +74,11 @@ public class CleanCraftOreGui extends GuiScreen {
     @Override
     public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
     	RenderUtils.renderNewGuiBackground();
-    	MineUtil.getUtilCore().getSettings().setCurrentGuiPage(1);
+    	MineUtil.getUtilCore().getSettings().setCurrentGuiPage(10);
     	this.drawCenteredString(this.fontRendererObj, "Cleaning and Crafting", this.width / 2, ModButton.API.getButtonYPos(0, true) + 5, ModButton.toRainbow(18));
-        this.drawCenteredString(this.fontRendererObj, "- Page 1 of 13 -", this.width / 2, 18, 16777215);
+        this.drawCenteredString(this.fontRendererObj, "- Page 10 of 13 -", this.width / 2, 18, 16777215);
         this.drawString(this.fontRendererObj, "Cleaning", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(1, true) + 8, 16777215);
-        this.drawString(this.fontRendererObj, "Crafting - Ore", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(4, true) + 8, 16777215);
+        this.drawString(this.fontRendererObj, "Crafting - Glass", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(4, true) + 8, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
@@ -88,23 +87,22 @@ public class CleanCraftOreGui extends GuiScreen {
     	this.buttonList.add(this.cleanSpawnerButton = new ModButton(200, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(2), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Spawner: OFF"));
     	this.buttonList.add(this.cleanChestInventoryButton = new ModButton(210, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(2), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ChestInventory: OFF"));
         
-    	this.buttonList.add(this.craftCoalBlockButton = new ModButton(300, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "CoalBlock: OFF"));
-        this.buttonList.add(this.craftLapisBlockButton = new ModButton(310, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "LapisBlock: OFF"));
-        this.buttonList.add(this.craftRedstoneBlockButton = new ModButton(320, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "RedstoneBlock: OFF"));
-        this.buttonList.add(this.craftIronBlockButton = new ModButton(330, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "IronBlock: OFF"));
-        this.buttonList.add(this.craftGoldIngotButton = new ModButton(340, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GoldIngot: OFF"));
-        this.buttonList.add(this.craftGoldBlockButton = new ModButton(350, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GoldBlock: OFF"));
-        this.buttonList.add(this.craftDiamondBlockButton = new ModButton(360, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "DiamondBlock: OFF"));
-        this.buttonList.add(this.craftEmeraldBlockButton = new ModButton(370, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "EmeraldBlock: OFF"));
-        
-        this.buttonList.add(this.craftCoalButton = new ModButton(380, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Coal: OFF"));
-        this.buttonList.add(this.craftLapisButton = new ModButton(390, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Lapis: OFF"));
-        this.buttonList.add(this.craftRedstoneButton = new ModButton(400, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Redstone: OFF"));
-        this.buttonList.add(this.craftIronButton = new ModButton(410, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Iron: OFF"));
-        this.buttonList.add(this.craftGoldNuggetButton = new ModButton(420, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GoldNugget: OFF"));
-        this.buttonList.add(this.craftGoldButton = new ModButton(430, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Gold: OFF"));
-        this.buttonList.add(this.craftDiamondButton = new ModButton(440, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Diamond: OFF"));
-        this.buttonList.add(this.craftEmeraldButton = new ModButton(450, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Emerald: OFF"));
+    	this.buttonList.add(this.craftGlassBlackButton = new ModButton(300, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassBlack: OFF"));
+        this.buttonList.add(this.craftGlassRedButton = new ModButton(310, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassRed: OFF"));
+        this.buttonList.add(this.craftGlassGreenButton = new ModButton(320, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassGreen: OFF"));
+        this.buttonList.add(this.craftGlassBrownButton = new ModButton(330, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassBrown: OFF"));
+        this.buttonList.add(this.craftGlassBlueButton = new ModButton(340, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassBlue: OFF"));
+        this.buttonList.add(this.craftGlassVioletButton = new ModButton(350, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassViolet: OFF"));
+        this.buttonList.add(this.craftGlassTurquoiseButton = new ModButton(360, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassTurquoise: OFF"));
+        this.buttonList.add(this.craftGlassLightGreyButton = new ModButton(370, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassLightGrey: OFF"));
+        this.buttonList.add(this.craftGlassGreyButton = new ModButton(380, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassGrey: OFF"));
+        this.buttonList.add(this.craftGlassPinkButton = new ModButton(390, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassPink: OFF"));
+        this.buttonList.add(this.craftGlassLightGreenButton = new ModButton(400, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassLightGreen: OFF"));
+        this.buttonList.add(this.craftGlassYellowButton = new ModButton(410, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassYellow: OFF"));
+        this.buttonList.add(this.craftGlassLightBlueButton = new ModButton(420, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassLightBlue: OFF"));
+        this.buttonList.add(this.craftGlassMagentaButton = new ModButton(430, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassMagenta: OFF"));
+        this.buttonList.add(this.craftGlassOrangeButton = new ModButton(440, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GlassOrange: OFF"));
+        this.buttonList.add(this.craftGlassButton = new ModButton(450, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Glass: OFF"));
         
         this.buttonList.add(this.pagePrevButton = new ModButton(100, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(9), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "<< BACK"));
         this.buttonList.add(this.pageNextButton = new ModButton(110, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(9), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "FORWARD >>"));
@@ -125,12 +123,12 @@ public class CleanCraftOreGui extends GuiScreen {
             switch (button.id) {
 	            case 100: {
 	            	doAction = false;
-	                this.mc.displayGuiScreen(new CleanCraftFoodGui());
+	                this.mc.displayGuiScreen(new CleanCraftWoolGui());
 	                break;
 	            }
 	            case 110: {
 	            	doAction = false;
-	                this.mc.displayGuiScreen(new CleanCraftStoneGui());
+	                this.mc.displayGuiScreen(new CleanCraftClayGui());
 	                break;
 	            }
 	            case 120: {
@@ -169,67 +167,67 @@ public class CleanCraftOreGui extends GuiScreen {
                 }
 	            /** Cat. Crafting */
                 case 300: {
-                    this.setSelection("Coalblock", true);
+                    this.setSelection("GlassBlack", true);
                     break;
                 }
                 case 310: {
-                    this.setSelection("Lapisblock", true);
+                    this.setSelection("GlassRed", true);
                     break;
                 }
                 case 320: {
-                    this.setSelection("Redstoneblock", true);
+                    this.setSelection("GlassGreen", true);
                     break;
                 }
                 case 330: {
-                    this.setSelection("Ironblock", true);
+                    this.setSelection("GlassBrown", true);
                     break;
                 }
                 case 340: {
-                    this.setSelection("Goldingot", true);
+                    this.setSelection("GlassbBlue", true);
                     break;
                 }
                 case 350: {
-                    this.setSelection("Goldblock", true);
+                    this.setSelection("GlassViolet", true);
                     break;
                 }
                 case 360: {
-                    this.setSelection("Diamondblock", true);
+                    this.setSelection("GlassTurquoise", true);
                     break;
                 }
                 case 370: {
-                    this.setSelection("Emeraldblock", true);
+                    this.setSelection("GlassLightGrey", true);
                     break;
                 }
                 case 380: {
-                    this.setSelection("Coal", true);
+                    this.setSelection("GlassGrey", true);
                     break;
                 }
                 case 390: {
-                    this.setSelection("Lapis", true);
+                    this.setSelection("GlassPink", true);
                     break;
                 }
                 case 400: {
-                    this.setSelection("Redstone", true);
+                    this.setSelection("GlassLightGreen", true);
                     break;
                 }
                 case 410: {
-                    this.setSelection("Iron", true);
+                    this.setSelection("GlassYellow", true);
                     break;
                 }
                 case 420: {
-                    this.setSelection("GoldNugget", true);
+                    this.setSelection("GlassLightblue", true);
                     break;
                 }
                 case 430: {
-                    this.setSelection("Gold", true);
+                    this.setSelection("GlassMagenta", true);
                     break;
                 }
                 case 440: {
-                    this.setSelection("Diamond", true);
+                    this.setSelection("GlassOrange", true);
                     break;
                 }
                 case 450: {
-                    this.setSelection("Emerald", true);
+                    this.setSelection("Glass", true);
                     break;
                 }
             }
@@ -293,23 +291,22 @@ public class CleanCraftOreGui extends GuiScreen {
         this.cleanSpawnerButton.displayString = this.getButtonDisplayString(this.cleanSpawnerButton.displayString, "spawner", false);
         this.cleanChestInventoryButton.displayString = this.getButtonDisplayString(this.cleanChestInventoryButton.displayString, "ChestInventory", false);
         
-        this.craftCoalBlockButton.displayString = this.getButtonDisplayString(this.craftCoalBlockButton.displayString, "coalblock", true);
-        this.craftLapisBlockButton.displayString = this.getButtonDisplayString(this.craftLapisBlockButton.displayString, "lapisblock", true);
-        this.craftRedstoneBlockButton.displayString = this.getButtonDisplayString(this.craftRedstoneBlockButton.displayString, "redstoneblock", true);
-        this.craftIronBlockButton.displayString = this.getButtonDisplayString(this.craftIronBlockButton.displayString, "ironblock", true);
-        this.craftGoldIngotButton.displayString = this.getButtonDisplayString(this.craftGoldIngotButton.displayString, "goldingot", true);
-        this.craftGoldBlockButton.displayString = this.getButtonDisplayString(this.craftGoldBlockButton.displayString, "goldblock", true);
-        this.craftDiamondBlockButton.displayString = this.getButtonDisplayString(this.craftDiamondBlockButton.displayString, "diamondblock", true);
-        this.craftEmeraldBlockButton.displayString = this.getButtonDisplayString(this.craftEmeraldBlockButton.displayString, "emeraldblock", true);
-
-        this.craftCoalButton.displayString = this.getButtonDisplayString(this.craftCoalButton.displayString, "coal", true);
-        this.craftLapisButton.displayString = this.getButtonDisplayString(this.craftLapisButton.displayString, "lapis", true);
-        this.craftRedstoneButton.displayString = this.getButtonDisplayString(this.craftRedstoneButton.displayString, "redstone", true);
-        this.craftIronButton.displayString = this.getButtonDisplayString(this.craftIronButton.displayString, "iron", true);
-        this.craftGoldNuggetButton.displayString = this.getButtonDisplayString(this.craftGoldNuggetButton.displayString, "goldnugget", true);
-        this.craftGoldButton.displayString = this.getButtonDisplayString(this.craftGoldButton.displayString, "gold", true);
-        this.craftDiamondButton.displayString = this.getButtonDisplayString(this.craftDiamondButton.displayString, "diamond", true);
-        this.craftEmeraldButton.displayString = this.getButtonDisplayString(this.craftEmeraldButton.displayString, "emerald", true);
+        this.craftGlassBlackButton.displayString = this.getButtonDisplayString(this.craftGlassBlackButton.displayString, "GlassBlack", true);
+        this.craftGlassRedButton.displayString = this.getButtonDisplayString(this.craftGlassRedButton.displayString, "GlassRed", true);
+        this.craftGlassGreenButton.displayString = this.getButtonDisplayString(this.craftGlassGreenButton.displayString, "GlassGreen", true);
+        this.craftGlassBrownButton.displayString = this.getButtonDisplayString(this.craftGlassBrownButton.displayString, "GlassBrown", true);
+        this.craftGlassBlueButton.displayString = this.getButtonDisplayString(this.craftGlassBlueButton.displayString, "GlassBlue", true);
+        this.craftGlassVioletButton.displayString = this.getButtonDisplayString(this.craftGlassVioletButton.displayString, "GlassViolet", true);
+        this.craftGlassTurquoiseButton.displayString = this.getButtonDisplayString(this.craftGlassTurquoiseButton.displayString, "GlassTurquoise", true);
+        this.craftGlassLightGreyButton.displayString = this.getButtonDisplayString(this.craftGlassLightGreyButton.displayString, "GlassLightGrey", true);
+        this.craftGlassGreyButton.displayString = this.getButtonDisplayString(this.craftGlassGreyButton.displayString, "GlassGrey", true);
+        this.craftGlassPinkButton.displayString = this.getButtonDisplayString(this.craftGlassPinkButton.displayString, "GlassPink", true);
+        this.craftGlassLightGreenButton.displayString = this.getButtonDisplayString(this.craftGlassLightGreenButton.displayString, "GlassLightGreen", true);
+        this.craftGlassYellowButton.displayString = this.getButtonDisplayString(this.craftGlassYellowButton.displayString, "GlassYellow", true);
+        this.craftGlassLightBlueButton.displayString = this.getButtonDisplayString(this.craftGlassLightBlueButton.displayString, "GlassLightBlue", true);
+        this.craftGlassMagentaButton.displayString = this.getButtonDisplayString(this.craftGlassMagentaButton.displayString, "GlassMagenta", true);
+        this.craftGlassOrangeButton.displayString = this.getButtonDisplayString(this.craftGlassOrangeButton.displayString, "GlassOrange", true);
+        this.craftGlassButton.displayString = this.getButtonDisplayString(this.craftGlassButton.displayString, "Glass", true);
     }
     
     @Override

@@ -7,7 +7,7 @@ import net.labymod.utils.ModColor;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minedevhd.mineutil.MineUtil;
-import net.minedevhd.mineutil.MineUtil.CGui;
+import net.minedevhd.mineutil.MineUtil.CCGui;
 import net.minedevhd.mineutil.gui.changelog.ChangelogGui;
 import net.minedevhd.mineutil.gui.storageprices.TEDLagerPreisGui;
 import net.minedevhd.mineutil.utils.ModButton;
@@ -39,8 +39,7 @@ public class CleanCraftOthersGui extends GuiScreen {
 			  closeButton,
 			  closeCraftButton,
 			  deactivateButton,
-			  changeLogButton,
-			  lagerPreisButton;
+			  changeLogButton;
 	
 	public CleanCraftOthersGui() {
     /**
@@ -53,6 +52,11 @@ public class CleanCraftOthersGui extends GuiScreen {
           > Prismarine
           > Others
           > Others2
+          > Wool
+          > Glass
+          > Clay
+          > Color
+          > Food
     */
     }
 	
@@ -61,7 +65,7 @@ public class CleanCraftOthersGui extends GuiScreen {
 		RenderUtils.renderNewGuiBackground();
     	MineUtil.getUtilCore().getSettings().setCurrentGuiPage(7);
     	this.drawCenteredString(this.fontRendererObj, "Cleaning and Crafting", this.width / 2, ModButton.API.getButtonYPos(0, true) + 5, ModButton.toRainbow(18));
-        this.drawCenteredString(this.fontRendererObj, "- Page 7 of 8 -", this.width / 2, 18, 16777215);
+        this.drawCenteredString(this.fontRendererObj, "- Page 7 of 13 -", this.width / 2, 18, 16777215);
         this.drawString(this.fontRendererObj, "Cleaning", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(1, true) + 8, 16777215);
         this.drawString(this.fontRendererObj, "Crafting - Others (1)", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(4, true) + 8, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -70,7 +74,7 @@ public class CleanCraftOthersGui extends GuiScreen {
 	@Override
 	public void initGui() {
 		this.buttonList.add(this.cleanSpawnerButton = new ModButton(200, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(2), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Spawner: OFF"));
-    	this.buttonList.add(this.cleanChestInventoryButton = new ModButton(210, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(2), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Chest-Inventory: OFF"));
+    	this.buttonList.add(this.cleanChestInventoryButton = new ModButton(210, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(2), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ChestInventory: OFF"));
     	
     	this.buttonList.add(this.craftBucketButton = new ModButton(300, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Bucket: OFF"));
         this.buttonList.add(this.craftItemFrameButton = new ModButton(310, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ItemFrame: OFF"));
@@ -96,7 +100,7 @@ public class CleanCraftOthersGui extends GuiScreen {
         this.buttonList.add(this.closeButton = new ModButton(140, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "CLOSE"));
         
 //        this.buttonList.add(this.changeLogButton = new ModButton(150, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), ModColor.GOLD.toString() + "Changelog"));
-        this.buttonList.add(this.lagerPreisButton = new ModButton(160, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(),  ModColor.AQUA.toString() + "Lager Preise"));
+//        this.buttonList.add(this.lagerPreisButton = new ModButton(160, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(),  ModColor.AQUA.toString() + "Lager Preise"));
         this.updateButtons();
 		super.initGui();
 	}
@@ -294,8 +298,8 @@ public class CleanCraftOthersGui extends GuiScreen {
     
     @Override
     public void onGuiClosed() {
-        CGui.setGUIOpend(false);
-        CGui.setGUIToggled(false);
+        CCGui.setGUIOpend(false);
+        CCGui.setGUIToggled(false);
         super.onGuiClosed();
     }
     

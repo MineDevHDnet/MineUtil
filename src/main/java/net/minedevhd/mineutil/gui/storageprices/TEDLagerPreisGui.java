@@ -10,9 +10,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
 import net.minedevhd.mineutil.MineUtil;
-import net.minedevhd.mineutil.MineUtil.CGui;
-import net.minedevhd.mineutil.gui.cleanandcraft.ausrangiert.CleanCraftGui;
-import net.minedevhd.mineutil.gui.cleanandcraft.ausrangiert.CleanCraftGui2;
+import net.minedevhd.mineutil.MineUtil.CCGui;
+import net.minedevhd.mineutil.gui.cleanandcraft.CleanCraftOreGui;
 import net.minedevhd.mineutil.utils.ModButton;
 import net.minedevhd.mineutil.utils.RenderUtils;
 
@@ -20,7 +19,7 @@ public class TEDLagerPreisGui extends GuiScreen {
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-    	ScaledResolution sr = new ScaledResolution(this.mc);
+    	final ScaledResolution sr = new ScaledResolution(mc);
     	RenderUtils.drawRoundedRect(sr.getScaledWidth() / 2 - 230, 6, sr.getScaledWidth() / 2 + 230, 29, 18, new Color(10, 10, 10, 100).getRGB()); // Titel
     	RenderUtils.drawRoundedRect(sr.getScaledWidth() / 2 - 230, 30, sr.getScaledWidth() / 2 + 230, 288, 18, new Color(10, 10, 10, 100).getRGB());
     	
@@ -98,8 +97,7 @@ public class TEDLagerPreisGui extends GuiScreen {
 	
 	@Override
 	public void initGui() {
-        this.buttonList.add(new ModButton(110, this.width / 2 + 5, this.height - 45, 85, 20, "Back"));
-        this.buttonList.add(new ModButton(200, this.width / 2 - 90, this.height - 45, 85, 20, "Close"));
+        this.buttonList.add(new ModButton(0, this.width / 2 - 45, this.height - 45, 110, 20, "Back"));
 		super.initGui();
 	}
 	
@@ -107,14 +105,9 @@ public class TEDLagerPreisGui extends GuiScreen {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		try {
 			switch (button.id) {
-			case 200:
-				this.mc.thePlayer.closeScreen();
+			case 0:
+				this.mc.displayGuiScreen(new CleanCraftOreGui());
 				break;
-				
-			case 110:
-				this.mc.displayGuiScreen(new CleanCraftGui());
-				break;
-
 			default:
 				break;
 			}
@@ -124,8 +117,8 @@ public class TEDLagerPreisGui extends GuiScreen {
 	
 	@Override
 	public void onGuiClosed() {
-		CGui.setGUIOpend(false);
-        CGui.setGUIToggled(false);
+		CCGui.setGUIOpend(false);
+        CCGui.setGUIToggled(false);
 		super.onGuiClosed();
 	}
 	

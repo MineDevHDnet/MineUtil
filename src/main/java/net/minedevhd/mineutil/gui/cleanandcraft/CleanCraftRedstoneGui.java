@@ -9,7 +9,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Items;
 import net.minedevhd.mineutil.MineUtil;
-import net.minedevhd.mineutil.MineUtil.CGui;
+import net.minedevhd.mineutil.MineUtil.CCGui;
 import net.minedevhd.mineutil.gui.changelog.ChangelogGui;
 import net.minedevhd.mineutil.gui.storageprices.TEDLagerPreisGui;
 import net.minedevhd.mineutil.utils.ModButton;
@@ -43,8 +43,7 @@ public class CleanCraftRedstoneGui extends GuiScreen {
     		  closeButton,
     		  closeCraftButton,
     		  deactivateButton,
-    		  changeLogButton,
-    		  lagerPreisButton;
+    		  changeLogButton;
     
     public CleanCraftRedstoneGui() {
     /**
@@ -57,6 +56,11 @@ public class CleanCraftRedstoneGui extends GuiScreen {
           > Prismarine
           > Others
           > Others2
+          > Wool
+          > Glass
+          > Clay
+          > Color
+          > Food
     */
     }
     
@@ -66,7 +70,7 @@ public class CleanCraftRedstoneGui extends GuiScreen {
     	MineUtil.getUtilCore().getSettings().setCurrentGuiPage(4);
     	
     	this.drawCenteredString(this.fontRendererObj, "Cleaning and Crafting", this.width / 2, ModButton.API.getButtonYPos(0, true) + 5, ModButton.toRainbow(18));
-        this.drawCenteredString(this.fontRendererObj, "- Page 4 of 8 -", this.width / 2, 18, 16777215);
+        this.drawCenteredString(this.fontRendererObj, "- Page 4 of 13 -", this.width / 2, 18, 16777215);
         
         this.drawString(this.fontRendererObj, "Cleaning", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(1, true) + 8, 16777215);
         this.drawString(this.fontRendererObj, "Crafting - Redstone", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(4, true) + 8, 16777215);
@@ -105,7 +109,7 @@ public class CleanCraftRedstoneGui extends GuiScreen {
         this.buttonList.add(this.closeButton = new ModButton(140, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "CLOSE"));
         
 //        this.buttonList.add(this.changeLogButton = new ModButton(150, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), ModColor.GOLD.toString() + "Changelog"));
-        this.buttonList.add(this.lagerPreisButton = new ModButton(160, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(),  ModColor.AQUA.toString() + "Lager Preise"));
+//        this.buttonList.add(this.lagerPreisButton = new ModButton(160, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(12), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(),  ModColor.AQUA.toString() + "Lager Preise"));
         this.updateButtons();
     	super.initGui();
     }
@@ -308,8 +312,8 @@ public class CleanCraftRedstoneGui extends GuiScreen {
     
     @Override
     public void onGuiClosed() {
-    	CGui.setGUIOpend(false);
-        CGui.setGUIToggled(false);
+    	CCGui.setGUIOpend(false);
+        CCGui.setGUIToggled(false);
     	super.onGuiClosed();
     }
     

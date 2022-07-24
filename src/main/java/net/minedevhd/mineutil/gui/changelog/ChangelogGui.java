@@ -16,7 +16,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minedevhd.mineutil.MineUtil;
-import net.minedevhd.mineutil.MineUtil.CGui;
+import net.minedevhd.mineutil.MineUtil.CCGui;
 import net.minedevhd.mineutil.gui.storageprices.PreisInfos;
 import net.minedevhd.mineutil.gui.storageprices.TEDLagerPreisGui;
 import net.minedevhd.mineutil.helper.StealHelper;
@@ -93,8 +93,8 @@ public class ChangelogGui extends GuiScreen
     
     @Override
     public void onGuiClosed() {
-    	CGui.setGUIOpend(false);
-    	CGui.setGUIToggled(false);
+    	CCGui.setGUIOpend(false);
+    	CCGui.setGUIToggled(false);
         super.onGuiClosed();
     }
     

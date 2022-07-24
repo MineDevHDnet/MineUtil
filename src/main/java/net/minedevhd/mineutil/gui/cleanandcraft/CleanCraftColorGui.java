@@ -23,29 +23,24 @@ import net.minedevhd.mineutil.utils.ModButton;
 import net.minedevhd.mineutil.utils.ModButton.API;
 import net.minedevhd.mineutil.utils.RenderUtils;
 
-public class CleanCraftOreGui extends GuiScreen {
+public class CleanCraftColorGui extends GuiScreen {
 	
     GuiButton cleanSpawnerButton,
     		  cleanChestInventoryButton,
-    		  
-    		  craftCoalBlockButton,
-    		  craftLapisBlockButton,
-    		  craftRedstoneBlockButton,
-    		  craftIronBlockButton,
-    		  craftGoldIngotButton,
-    		  craftGoldBlockButton,
-    		  craftDiamondBlockButton,
-    		  craftEmeraldBlockButton,
-    		  
-    		  craftCoalButton,
-    		  craftLapisButton,
-    		  craftRedstoneButton,
-    		  craftIronButton,
-    		  craftGoldNuggetButton,
-    		  craftGoldButton,
-    		  craftDiamondButton,
-    		  craftEmeraldButton,
-	  
+
+			  craftColorRedButton,
+			  craftColorYellowButton,
+			  craftColorPinkButton,
+			  craftColorMagentaButton,
+			  craftColorOrangeButton,
+			  craftColorLightGreyButton,
+			  craftColorVioletButton,
+			  craftColorTurquoiseButton,
+			  craftColorGreyButton,
+			  craftColorLightGreenButton,
+			  craftColorLightBlueButton,
+			  craftColorWhiteButton,
+
 			  pageNextButton,
 			  pagePrevButton,
 			  closeButton,
@@ -53,7 +48,7 @@ public class CleanCraftOreGui extends GuiScreen {
 			  deactivateButton,
 			  changeLogButton;
     
-    public CleanCraftOreGui() {
+    public CleanCraftColorGui() {
     /**
         Sort list:
           > Ore
@@ -75,11 +70,11 @@ public class CleanCraftOreGui extends GuiScreen {
     @Override
     public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
     	RenderUtils.renderNewGuiBackground();
-    	MineUtil.getUtilCore().getSettings().setCurrentGuiPage(1);
+    	MineUtil.getUtilCore().getSettings().setCurrentGuiPage(12);
     	this.drawCenteredString(this.fontRendererObj, "Cleaning and Crafting", this.width / 2, ModButton.API.getButtonYPos(0, true) + 5, ModButton.toRainbow(18));
-        this.drawCenteredString(this.fontRendererObj, "- Page 1 of 13 -", this.width / 2, 18, 16777215);
+        this.drawCenteredString(this.fontRendererObj, "- Page 12 of 13 -", this.width / 2, 18, 16777215);
         this.drawString(this.fontRendererObj, "Cleaning", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(1, true) + 8, 16777215);
-        this.drawString(this.fontRendererObj, "Crafting - Ore", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(4, true) + 8, 16777215);
+        this.drawString(this.fontRendererObj, "Crafting - Color", ModButton.API.getButtonXPos(1, this.width) + 1, ModButton.API.getButtonYPos(4, true) + 8, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
     
@@ -88,23 +83,18 @@ public class CleanCraftOreGui extends GuiScreen {
     	this.buttonList.add(this.cleanSpawnerButton = new ModButton(200, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(2), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Spawner: OFF"));
     	this.buttonList.add(this.cleanChestInventoryButton = new ModButton(210, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(2), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ChestInventory: OFF"));
         
-    	this.buttonList.add(this.craftCoalBlockButton = new ModButton(300, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "CoalBlock: OFF"));
-        this.buttonList.add(this.craftLapisBlockButton = new ModButton(310, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "LapisBlock: OFF"));
-        this.buttonList.add(this.craftRedstoneBlockButton = new ModButton(320, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "RedstoneBlock: OFF"));
-        this.buttonList.add(this.craftIronBlockButton = new ModButton(330, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "IronBlock: OFF"));
-        this.buttonList.add(this.craftGoldIngotButton = new ModButton(340, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GoldIngot: OFF"));
-        this.buttonList.add(this.craftGoldBlockButton = new ModButton(350, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GoldBlock: OFF"));
-        this.buttonList.add(this.craftDiamondBlockButton = new ModButton(360, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "DiamondBlock: OFF"));
-        this.buttonList.add(this.craftEmeraldBlockButton = new ModButton(370, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "EmeraldBlock: OFF"));
-        
-        this.buttonList.add(this.craftCoalButton = new ModButton(380, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Coal: OFF"));
-        this.buttonList.add(this.craftLapisButton = new ModButton(390, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Lapis: OFF"));
-        this.buttonList.add(this.craftRedstoneButton = new ModButton(400, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Redstone: OFF"));
-        this.buttonList.add(this.craftIronButton = new ModButton(410, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Iron: OFF"));
-        this.buttonList.add(this.craftGoldNuggetButton = new ModButton(420, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "GoldNugget: OFF"));
-        this.buttonList.add(this.craftGoldButton = new ModButton(430, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Gold: OFF"));
-        this.buttonList.add(this.craftDiamondButton = new ModButton(440, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Diamond: OFF"));
-        this.buttonList.add(this.craftEmeraldButton = new ModButton(450, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Emerald: OFF"));
+        this.buttonList.add(this.craftColorRedButton = new ModButton(300, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorRed: OFF"));
+        this.buttonList.add(this.craftColorYellowButton = new ModButton(310, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorYellow: OFF"));
+        this.buttonList.add(this.craftColorPinkButton = new ModButton(320, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorPink: OFF"));
+        this.buttonList.add(this.craftColorMagentaButton = new ModButton(330, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorMagenta: OFF"));
+        this.buttonList.add(this.craftColorOrangeButton = new ModButton(340, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorOrange: OFF"));
+        this.buttonList.add(this.craftColorLightGreyButton = new ModButton(350, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorLightGrey: OFF"));
+        this.buttonList.add(this.craftColorVioletButton = new ModButton(360, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorViolet: OFF"));
+        this.buttonList.add(this.craftColorTurquoiseButton = new ModButton(370, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorTurquoise: OFF"));
+        this.buttonList.add(this.craftColorGreyButton = new ModButton(380, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorGrey: OFF"));
+        this.buttonList.add(this.craftColorLightGreenButton = new ModButton(390, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorLightGreen: OFF"));
+        this.buttonList.add(this.craftColorLightBlueButton = new ModButton(400, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorLightBlue: OFF"));
+        this.buttonList.add(this.craftColorWhiteButton = new ModButton(410, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(8), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ColorWhite: OFF"));
         
         this.buttonList.add(this.pagePrevButton = new ModButton(100, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(9), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "<< BACK"));
         this.buttonList.add(this.pageNextButton = new ModButton(110, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(9), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "FORWARD >>"));
@@ -125,12 +115,12 @@ public class CleanCraftOreGui extends GuiScreen {
             switch (button.id) {
 	            case 100: {
 	            	doAction = false;
-	                this.mc.displayGuiScreen(new CleanCraftFoodGui());
+	                this.mc.displayGuiScreen(new CleanCraftClayGui());
 	                break;
 	            }
 	            case 110: {
 	            	doAction = false;
-	                this.mc.displayGuiScreen(new CleanCraftStoneGui());
+	                this.mc.displayGuiScreen(new CleanCraftFoodGui());
 	                break;
 	            }
 	            case 120: {
@@ -169,67 +159,51 @@ public class CleanCraftOreGui extends GuiScreen {
                 }
 	            /** Cat. Crafting */
                 case 300: {
-                    this.setSelection("Coalblock", true);
+                    this.setSelection("ColorRed", true);
                     break;
                 }
                 case 310: {
-                    this.setSelection("Lapisblock", true);
+                    this.setSelection("ColorYellow", true);
                     break;
                 }
                 case 320: {
-                    this.setSelection("Redstoneblock", true);
+                    this.setSelection("ColorPink", true);
                     break;
                 }
                 case 330: {
-                    this.setSelection("Ironblock", true);
+                    this.setSelection("GlassbBlue", true);
                     break;
                 }
                 case 340: {
-                    this.setSelection("Goldingot", true);
+                    this.setSelection("ColorOrange", true);
                     break;
                 }
                 case 350: {
-                    this.setSelection("Goldblock", true);
+                    this.setSelection("ColorLightGrey", true);
                     break;
                 }
                 case 360: {
-                    this.setSelection("Diamondblock", true);
+                    this.setSelection("ColorViolet", true);
                     break;
                 }
                 case 370: {
-                    this.setSelection("Emeraldblock", true);
+                    this.setSelection("ColorTurquoise", true);
                     break;
                 }
                 case 380: {
-                    this.setSelection("Coal", true);
+                    this.setSelection("ColorGrey", true);
                     break;
                 }
                 case 390: {
-                    this.setSelection("Lapis", true);
+                    this.setSelection("ColorLightGreen", true);
                     break;
                 }
                 case 400: {
-                    this.setSelection("Redstone", true);
+                    this.setSelection("ColorLightBlue", true);
                     break;
                 }
                 case 410: {
-                    this.setSelection("Iron", true);
-                    break;
-                }
-                case 420: {
-                    this.setSelection("GoldNugget", true);
-                    break;
-                }
-                case 430: {
-                    this.setSelection("Gold", true);
-                    break;
-                }
-                case 440: {
-                    this.setSelection("Diamond", true);
-                    break;
-                }
-                case 450: {
-                    this.setSelection("Emerald", true);
+                    this.setSelection("ColorWhite", true);
                     break;
                 }
             }
@@ -293,23 +267,18 @@ public class CleanCraftOreGui extends GuiScreen {
         this.cleanSpawnerButton.displayString = this.getButtonDisplayString(this.cleanSpawnerButton.displayString, "spawner", false);
         this.cleanChestInventoryButton.displayString = this.getButtonDisplayString(this.cleanChestInventoryButton.displayString, "ChestInventory", false);
         
-        this.craftCoalBlockButton.displayString = this.getButtonDisplayString(this.craftCoalBlockButton.displayString, "coalblock", true);
-        this.craftLapisBlockButton.displayString = this.getButtonDisplayString(this.craftLapisBlockButton.displayString, "lapisblock", true);
-        this.craftRedstoneBlockButton.displayString = this.getButtonDisplayString(this.craftRedstoneBlockButton.displayString, "redstoneblock", true);
-        this.craftIronBlockButton.displayString = this.getButtonDisplayString(this.craftIronBlockButton.displayString, "ironblock", true);
-        this.craftGoldIngotButton.displayString = this.getButtonDisplayString(this.craftGoldIngotButton.displayString, "goldingot", true);
-        this.craftGoldBlockButton.displayString = this.getButtonDisplayString(this.craftGoldBlockButton.displayString, "goldblock", true);
-        this.craftDiamondBlockButton.displayString = this.getButtonDisplayString(this.craftDiamondBlockButton.displayString, "diamondblock", true);
-        this.craftEmeraldBlockButton.displayString = this.getButtonDisplayString(this.craftEmeraldBlockButton.displayString, "emeraldblock", true);
-
-        this.craftCoalButton.displayString = this.getButtonDisplayString(this.craftCoalButton.displayString, "coal", true);
-        this.craftLapisButton.displayString = this.getButtonDisplayString(this.craftLapisButton.displayString, "lapis", true);
-        this.craftRedstoneButton.displayString = this.getButtonDisplayString(this.craftRedstoneButton.displayString, "redstone", true);
-        this.craftIronButton.displayString = this.getButtonDisplayString(this.craftIronButton.displayString, "iron", true);
-        this.craftGoldNuggetButton.displayString = this.getButtonDisplayString(this.craftGoldNuggetButton.displayString, "goldnugget", true);
-        this.craftGoldButton.displayString = this.getButtonDisplayString(this.craftGoldButton.displayString, "gold", true);
-        this.craftDiamondButton.displayString = this.getButtonDisplayString(this.craftDiamondButton.displayString, "diamond", true);
-        this.craftEmeraldButton.displayString = this.getButtonDisplayString(this.craftEmeraldButton.displayString, "emerald", true);
+        this.craftColorRedButton.displayString = this.getButtonDisplayString(this.craftColorRedButton.displayString, "ColorRed", true);
+        this.craftColorYellowButton.displayString = this.getButtonDisplayString(this.craftColorYellowButton.displayString, "ColorYellow", true);
+        this.craftColorPinkButton.displayString = this.getButtonDisplayString(this.craftColorPinkButton.displayString, "ColorPink", true);
+        this.craftColorMagentaButton.displayString = this.getButtonDisplayString(this.craftColorMagentaButton.displayString, "ColorMagenta", true);
+        this.craftColorOrangeButton.displayString = this.getButtonDisplayString(this.craftColorOrangeButton.displayString, "ColorOrange", true);
+        this.craftColorLightGreyButton.displayString = this.getButtonDisplayString(this.craftColorLightGreyButton.displayString, "ColorLightGrey", true);
+        this.craftColorVioletButton.displayString = this.getButtonDisplayString(this.craftColorVioletButton.displayString, "ColorViolet", true);
+        this.craftColorTurquoiseButton.displayString = this.getButtonDisplayString(this.craftColorTurquoiseButton.displayString, "ColorTurquoise", true);
+        this.craftColorGreyButton.displayString = this.getButtonDisplayString(this.craftColorGreyButton.displayString, "ColorGrey", true);
+        this.craftColorLightGreenButton.displayString = this.getButtonDisplayString(this.craftColorLightGreenButton.displayString, "ColorLightGreen", true);
+        this.craftColorLightBlueButton.displayString = this.getButtonDisplayString(this.craftColorLightBlueButton.displayString, "ColorLightBlue", true);
+        this.craftColorWhiteButton.displayString = this.getButtonDisplayString(this.craftColorWhiteButton.displayString, "ColorWhite", true);
     }
     
     @Override
