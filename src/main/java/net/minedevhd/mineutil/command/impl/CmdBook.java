@@ -15,7 +15,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class CmdBook extends Command {
 
 	public CmdBook() {
-		super("CmdBook", "CmdBook", "Gives you a special command book to annoy players (Creative)", "cmdbook");
+		super("CmdBook", "CmdBook", "Gives you a special command book to annoy players (Creative)", "cmdbook", Category.EXPLOIT);
 	}
 
 	private final MineUtil mineUtil = MineUtil.getUtilCore();

@@ -8,7 +8,7 @@ import net.minedevhd.mineutil.command.Command;
 public class AFK extends Command {
 
 	public AFK() {
-		super("AFK", "AFK [Old]", "This command is disabled", "afk");
+		super("AFK", "AFK [Old]", "This command is disabled", "afk", Category.OTHER);
 	}
 	
 	private boolean activated = false;

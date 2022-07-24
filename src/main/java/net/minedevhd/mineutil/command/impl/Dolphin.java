@@ -11,7 +11,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Dolphin extends Command {
 
 	public Dolphin() {
-		super("Dolphin", "Dolphin [Vanilla]", "Move in the water like a dolphin", "dolphin");
+		super("Dolphin", "Dolphin [Vanilla]", "Move in the water like a dolphin", "dolphin", Category.MOVEMENT);
 	}
 
 	private static final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

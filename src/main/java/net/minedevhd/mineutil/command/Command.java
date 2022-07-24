@@ -9,6 +9,7 @@ import net.labymod.api.events.MessageSendEvent;
 import net.labymod.main.LabyMod;
 import net.labymod.utils.ModColor;
 import net.minedevhd.mineutil.MineUtil;
+import net.minedevhd.mineutil.command.impl.Category;
 
 public abstract class Command {
 	
@@ -16,15 +17,17 @@ public abstract class Command {
 	private String displayName;
 	private String description;
 	private String syntax;
+	private Category category;
 	private List<String> aliases = new ArrayList<String>();
 	
 	private static final MineUtil mineUtil = MineUtil.getUtilCore();
 	
-	public Command(String name, String displayName, String description, String syntax) {
+	public Command(String name, String displayName, String description, String syntax, Category category) {
 		this.name = name;
 		this.displayName = displayName;
 		this.description = description;
 		this.syntax = syntax;
+		this.category = category;
 	}
 	
 	public abstract void onCommand(String[]  args, String command);
@@ -65,6 +68,10 @@ public abstract class Command {
 		this.syntax = syntax;
 	}
 	
+	public Category getCategory() {
+		return this.category;
+	}
+	
 	public List<String> getAliases() {
 		return this.aliases;
 	}
@@ -88,7 +95,7 @@ public abstract class Command {
 						
 						for(Command c : CommandManager.getCommands()) {
 							if(c.getAliases().contains(commandName) || c.getName().equalsIgnoreCase(commandName) || c.getSyntax().equalsIgnoreCase(commandName)) {
-								if(mineUtil.getSettings().getModEnabled()) {
+								if(mineUtil.getSettings().isModEnabled()) {
 									c.onCommand(Arrays.copyOfRange(message.split(" "), 1, message.split(" ").length), message);
 								}
 								return true;

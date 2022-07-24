@@ -6,7 +6,7 @@ import net.minedevhd.mineutil.command.Command;
 public class MoneyDropGrabber extends Command {
 
 	public MoneyDropGrabber() {
-		super("MoneyDropGrabber", "Money-Drop Grabber", "Picks up every money drop", "mdg");
+		super("MoneyDropGrabber", "Money-Drop Grabber", "Picks up every money drop", "mdg", Category.FUN);
 	}
 	
 	private boolean activated = false;

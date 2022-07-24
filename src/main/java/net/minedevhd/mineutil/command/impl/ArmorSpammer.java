@@ -19,7 +19,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class ArmorSpammer extends Command {
 
 	public ArmorSpammer() {
-		super("ArmorSpammer", "ArmorStand Spammer", "Spawn Armorstands at any position (Creative)", "armorspammer");
+		super("ArmorSpammer", "ArmorStand Spammer", "Spawn Armorstands at any position (Creative)", "armorspammer", Category.EXPLOIT);
 	}
 	
 	/**

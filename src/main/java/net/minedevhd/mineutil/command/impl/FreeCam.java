@@ -9,7 +9,7 @@ import net.minedevhd.mineutil.modules.mods.FreeCamMod;
 public class FreeCam extends Command {
 
 	public FreeCam() {
-		super("FreeCam", "FreeCam", "Toggles your FreeCam-Mode", "freecam");
+		super("FreeCam", "FreeCam", "Toggles your FreeCam-Mode", "freecam", Category.PLAYER);
 	}
 
 	@Override

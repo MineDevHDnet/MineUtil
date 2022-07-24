@@ -13,7 +13,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class Give extends Command {
 
 	public Give() {
-		super("Give", "Give", "Gives you all of items such as Commandblock (Creative)", "give");
+		super("Give", "Give", "Gives you all of items such as Commandblock (Creative)", "give", Category.EXPLOIT);
 	}
 
 	private final MineUtil mineUtil = MineUtil.getUtilCore();

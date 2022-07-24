@@ -12,7 +12,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class Reload extends Command {
 
 	public Reload() {
-		super("Reload", "Reload", "Reload all Commands", "reload");
+		super("Reload", "Reload", "Reload all Commands", "reload", Category.OTHER);
 	}
 
 	private static final MineUtil mineUtil =  MineUtil.getUtilCore();

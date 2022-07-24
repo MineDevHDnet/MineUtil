@@ -10,7 +10,7 @@ import net.minedevhd.mineutil.utils.discord.Discord;
 public class Help extends Command {
 	
 	public Help() {
-		super("Help", "Help", "Show Command help", "help");
+		super("Help", "Help", "Show Command help", "help", Category.OTHER);
 	}
 	
 	public final LabyModAPI API = MineUtil.getUtilCore().getApi();

@@ -10,7 +10,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Autowalk extends Command {
 
 	public Autowalk() {
-		super("Autowalk", "Autowalk", "Walks automaticly", "autowalk");
+		super("Autowalk", "Autowalk", "Walks automaticly", "autowalk", Category.MOVEMENT);
 	}
 
 	private static final GameSettings gameSettings = MineUtil.getUtilCore().getMCCore().gameSettings;

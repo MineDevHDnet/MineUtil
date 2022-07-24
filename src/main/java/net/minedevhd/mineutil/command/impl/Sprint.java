@@ -10,7 +10,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Sprint extends Command {
 
 	public Sprint() {
-		super("Sprint", "Sprint [Vanilla]", "Sprints automaticly", "sprint");
+		super("Sprint", "Sprint [Vanilla]", "Sprints automaticly", "sprint", Category.MOVEMENT);
 	}
 
 	private static final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

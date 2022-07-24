@@ -17,7 +17,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class Hologram extends Command {
 
 	public Hologram() {
-		super("Hologram", "Hologram Spammer", "Spawn any text at any position (Creative)", "holo");
+		super("Hologram", "Hologram Spammer", "Spawn any text at any position (Creative)", "holo", Category.EXPLOIT);
 	}
 
 	private final MineUtil mineUtil = MineUtil.getUtilCore();

@@ -6,12 +6,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
 import net.minedevhd.mineutil.MineUtil;
 import net.minedevhd.mineutil.command.Command;
-import net.minedevhd.mineutil.utils.SessionThread;
 
 public class Fly extends Command {
 
 	public Fly() {
-		super("Flight", "Flight [Vanilla]", "Toggles your Fly-Mode", "fly");
+		super("Flight", "Flight [Vanilla]", "Toggles your Fly-Mode", "fly", Category.MOVEMENT);
 	}
 
 	private final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

@@ -12,7 +12,7 @@ import java.net.URI;
 public class LabyNet extends Command {
 
 	public LabyNet() {
-		super("LabyNet", "LabyNet", "You can provide a profile", "labynet");
+		super("LabyNet", "LabyNet", "You can provide a profile", "labynet", Category.OTHER);
 	}
 
 	private static final MineUtil mineUtil = MineUtil.getUtilCore();

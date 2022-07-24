@@ -12,7 +12,7 @@ import net.minedevhd.mineutil.command.Command;
 public class NoFall extends Command {
 
 	public NoFall() {
-		super("NoFall", "NoFall [Vanilla]", "No longer take fall damage", "nofall");
+		super("NoFall", "NoFall [Vanilla]", "No longer take fall damage", "nofall", Category.MOVEMENT);
 	}
 
 	private static final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

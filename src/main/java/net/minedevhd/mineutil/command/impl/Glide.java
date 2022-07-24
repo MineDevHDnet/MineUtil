@@ -11,7 +11,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Glide extends Command {
 
 	public Glide() {
-		super("Glide", "Glide [Vanilla]", "Glide in the air like a god", "glide");
+		super("Glide", "Glide [Vanilla]", "Glide in the air like a god", "glide", Category.MOVEMENT);
 	}
 
 	private static final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

@@ -9,7 +9,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class Join extends Command {
 
 	public Join() {
-		super("Join", "Join", "Join the original server from developer", "join");
+		super("Join", "Join", "Join the original server from developer", "join", Category.OTHER);
 	}
 
 	private final MineUtil mineUtil = MineUtil.getUtilCore();

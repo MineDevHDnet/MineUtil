@@ -11,7 +11,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Parkour extends Command {
 
 	public Parkour() {
-		super("Parkour", "Parkour [Vanilla]", "Jumps automaticly", "parkour");
+		super("Parkour", "Parkour [Vanilla]", "Jumps automaticly", "parkour", Category.MOVEMENT);
 	}
 
 	private static final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

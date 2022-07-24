@@ -11,7 +11,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class CheckPlayers extends Command {
 
 	public CheckPlayers() {
-		super("CheckPlayers", "CheckPlayers [Packet]", "Checks all players in the area for players", "checkplayers");
+		super("CheckPlayers", "CheckPlayers [Packet]", "Checks all players in the area for players", "checkplayers", Category.WORLD);
 	}
 
 	private final MineUtil mineUtil = MineUtil.getUtilCore();

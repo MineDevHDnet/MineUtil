@@ -8,7 +8,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Say extends Command {
 
 	public Say() {
-		super("Say", "Say", "Sends addon commands to global chat", "say");
+		super("Say", "Say", "Sends addon commands to global chat", "say", Category.PLAYER);
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import net.minedevhd.mineutil.command.Command;
 public class KillArmorStands extends Command {
 
 	public KillArmorStands() {
-		super("KillArmorStands", "KillArmorStands", "Kills all armorstands on the world", "kas");
+		super("KillArmorStands", "KillArmorStands", "Kills all armorstands on the world", "kas", Category.WORLD);
 	}
 
 	@Override

@@ -35,13 +35,13 @@ public class CommandManager {
 		commands.add(new Join());
 		commands.add(new Author());
 		commands.add(new Reload());
-		commands.add(new MurderMystery());
+		commands.add(new LabyNet());
 
-		commands.add(new CheckPlayers());
+//		commands.add(new CheckPlayers());
 		
 		//MOVEMENT
 		commands.add(new Fly());
-		commands.add(new Step());
+//		commands.add(new Step()); (cannot disable)
 		commands.add(new Glide());
 		commands.add(new Sneak());
 		commands.add(new NoFall());
@@ -54,7 +54,6 @@ public class CommandManager {
 		commands.add(new KillArmorStands());
 		
 		//FUN
-		commands.add(new LabyNet());
 		commands.add(new MoneyDropGrabber());
 		
 		//PLAYER
@@ -66,9 +65,11 @@ public class CommandManager {
 //		EXPLOIT
 		commands.add(new Give());
 		commands.add(new CmdBook());
-		commands.add(new Exploit()); /*(migrated crashskull + cickick into exploit command)*/
+//		commands.add(new Exploit()); /*(migrated crashskull + cickick into exploit command)*/
+//		commands.add(new CheckCmd());
 		commands.add(new Hologram());
 		commands.add(new ArmorSpammer());
+		commands.add(new MurderMystery());
 	}
 	
 }

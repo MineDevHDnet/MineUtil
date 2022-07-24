@@ -10,7 +10,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Sneak extends Command {
 
 	public Sneak() {
-		super("Sneak", "Sneak [Key]", "Sneaks automaticly", "sneak");
+		super("Sneak", "Sneak [Key]", "Sneaks automaticly", "sneak", Category.MOVEMENT);
 	}
 
 	private static final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

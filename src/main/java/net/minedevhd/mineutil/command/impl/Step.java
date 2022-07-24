@@ -11,7 +11,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Step extends Command {
 
 	public Step() {
-		super("Step", "Step [Vanilla]", "Step blocks instantly", "step");
+		super("Step", "Step [Vanilla]", "Step blocks instantly", "step", Category.MOVEMENT);
 	}
 
 	private static final Minecraft mc =  MineUtil.getUtilCore().getMCCore();

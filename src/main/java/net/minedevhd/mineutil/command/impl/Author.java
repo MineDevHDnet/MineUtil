@@ -13,7 +13,7 @@ import net.minedevhd.mineutil.command.Command;
 public class Author extends Command {
 
 	public Author() {
-		super("Author", "Author", "Show the developer of MineUtil", "author");
+		super("Author", "Author", "Show the developer of MineUtil", "author", Category.OTHER);
 	}
 
 	@Override

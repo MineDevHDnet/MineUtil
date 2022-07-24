@@ -11,7 +11,7 @@ import net.minedevhd.mineutil.command.CommandManager;
 public class NBT extends Command {
 
 	public NBT() {
-		super("NBT", "NBT", "Shows/Copies the NBT data of an item", "nbt");
+		super("NBT", "NBT", "Shows/Copies the NBT data of an item", "nbt", Category.OTHER);
 	}
 	
 	private static final MineUtil mineUtil = MineUtil.getUtilCore();

@@ -10,7 +10,7 @@ import net.minedevhd.mineutil.command.Command;
 public class MurderMystery extends Command {
 
 	public MurderMystery() {
-		super("MurderMystery", "MurderMystery [Packet]", "Find the killer in the game 'MurderMystery' on Hypixel", "murdermystery");
+		super("MurderMystery", "MurderMystery [Packet]", "Find the killer in the game 'MurderMystery' on Hypixel", "murdermystery", Category.EXPLOIT);
 	}
 
 	private final MineUtil mineUtil = MineUtil.getUtilCore();

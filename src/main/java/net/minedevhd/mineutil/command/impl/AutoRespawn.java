@@ -12,7 +12,7 @@ import net.minedevhd.mineutil.command.Command;
 public class AutoRespawn extends Command {
 
 	public AutoRespawn() {
-		super("AutoRespawn", "AutoRespawn [Packets]", "Respawn automatically", "autorespawn");
+		super("AutoRespawn", "AutoRespawn [Packets]", "Respawn automatically", "autorespawn", Category.PLAYER);
 	}
 
 	private static final Minecraft mc = MineUtil.getUtilCore().getMCCore();
