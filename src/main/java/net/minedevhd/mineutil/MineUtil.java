@@ -53,6 +53,7 @@ import net.minedevhd.mineutil.modules.mods.TrajectoriesMod;
 import net.minedevhd.mineutil.modules.mods.grieferwert.GrieferWertMod;
 import net.minedevhd.mineutil.settings.ModSettings;
 import net.minedevhd.mineutil.utils.Exploit;
+import net.minedevhd.mineutil.utils.HeadDownloaderUtil;
 import net.minedevhd.mineutil.utils.ModButton;
 import net.minedevhd.mineutil.utils.graf.RenderUtils;
 
@@ -73,13 +74,13 @@ public class MineUtil extends LabyModAddon {
     private String craftSelection = "";
     private ServerData lastServer;
     private boolean onGrieferGames;
+    private boolean mysteryProxyRegistered;
     private Float previousGamma;
 
     public ModuleCategory MINEUTIL_CATEGORY;
     public boolean isGuiKeyPressed;
 
     public MineUtil() {
-        // Set the singleton before helper/settings classes can resolve UtilCore.mineUtil.
         setCore(this);
         setSettings(new ModSettings());
         this.cleanHelper = new CleanHelper();
@@ -185,7 +186,7 @@ public class MineUtil extends LabyModAddon {
         Command.initCmdBase();
         registerOverlayRenderer();
         registerJoinListener();
-        Exploit.HeadDownloader.register();
+        HeadDownloaderUtil.register();
 
         previousGamma = getMinecraft().gameSettings.gammaSetting;
         if (getSettings().isModFullbright()) {
@@ -214,6 +215,9 @@ public class MineUtil extends LabyModAddon {
                     }
 
                     final String displayName = command.getDisplayName();
+                    if (displayName == null) {
+                        continue;
+                    }
                     renderModule(minecraft, RenderUtils.getResolution(), y, font.getStringWidth(displayName), displayName);
                     y += 10;
                 }
@@ -260,8 +264,9 @@ public class MineUtil extends LabyModAddon {
                     getMinecraft().thePlayer.sendChatMessage("/portal");
                 }
 
-                if (getSettings().isMysteryModProxy()) {
+                if (getSettings().isMysteryModProxy() && !mysteryProxyRegistered) {
                     Exploit.GrieferGames.MysteryMod.startProxy();
+                    mysteryProxyRegistered = true;
                 }
             }
         });
@@ -269,6 +274,11 @@ public class MineUtil extends LabyModAddon {
 
     @Override
     public void onDisable() {
+        CitybuildAutoJoinModule.shutdown();
+        CCGui.setGUIOpend(false);
+        CCGui.setGUIToggled(false);
+        isGuiKeyPressed = false;
+
         if (previousGamma != null && getMinecraft() != null && getMinecraft().gameSettings != null) {
             getMinecraft().gameSettings.gammaSetting = previousGamma;
         }
@@ -277,6 +287,9 @@ public class MineUtil extends LabyModAddon {
 
     private void renderModule(final Minecraft minecraft, final ScaledResolution resolution,
                               final int height, final int length, final String text) {
+        if (resolution == null || text == null) {
+            return;
+        }
         final int right = resolution.getScaledWidth();
         final int left = right - length - 5;
         GuiScreen.drawRect(left, height + 1, right, height + 11, new Color(0, 0, 0, 130).getRGB());
@@ -339,7 +352,9 @@ public class MineUtil extends LabyModAddon {
     }
 
     public void sendQueued(final String message) {
-        if (message == null || message.trim().isEmpty()) {
+        if (message == null || message.trim().isEmpty()
+                || LabyModCore.getMinecraft() == null
+                || LabyModCore.getMinecraft().getPlayer() == null) {
             return;
         }
         LabyModCore.getMinecraft().getPlayer().sendChatMessage(message);
