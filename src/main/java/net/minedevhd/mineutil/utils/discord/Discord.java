@@ -36,7 +36,7 @@ public final class Discord {
     }
 
     public static void write(final String hook, final String title, final String message, final Color color) {
-        final DiscordWebhook webhook = createWebhook(hook, title, message, color);
+        final DiscordWebhook webhook = createWebhook(hook, title, message, null, color);
         if (webhook != null) {
             executeAsync(webhook);
         }
@@ -44,25 +44,15 @@ public final class Discord {
 
     public static void write(final String hook, final String title, final String message,
                              final UUID uuid, final Color color) {
-        final DiscordWebhook webhook = createWebhook(hook, title, message, color);
-        if (webhook == null) {
-            return;
+        final DiscordWebhook webhook = createWebhook(hook, title, message, uuid, color);
+        if (webhook != null) {
+            executeAsync(webhook);
         }
-
-        if (uuid != null) {
-            webhook.addEmbed(new DiscordWebhook.EmbedObject()
-                    .setTitle(title)
-                    .setDescription(message)
-                    .setColor(color)
-                    .addField("Date", getFormat("dd.MM.yyyy"), true)
-                    .addField("Time", getFormat("HH:mm:ss"), true)
-                    .setThumbnail("https://laby.net/texture/profile/head/" + uuid + ".png?size=50&overlay"));
-        }
-        executeAsync(webhook);
     }
 
     private static DiscordWebhook createWebhook(final String hook, final String title,
-                                                 final String message, final Color color) {
+                                                 final String message, final UUID uuid,
+                                                 final Color color) {
         if (hook == null) {
             return null;
         }
@@ -75,12 +65,19 @@ public final class Discord {
         final DiscordWebhook webhook = new DiscordWebhook(trimmedHook);
         webhook.setUsername("MineUtil");
         webhook.setTts(false);
-        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+
+        final DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject()
                 .setTitle(title == null ? "MineUtil" : title)
                 .setDescription(message == null ? "" : message)
                 .setColor(color == null ? Color.WHITE : color)
                 .addField("Date", getFormat("dd.MM.yyyy"), true)
-                .addField("Time", getFormat("HH:mm:ss"), true));
+                .addField("Time", getFormat("HH:mm:ss"), true);
+
+        if (uuid != null) {
+            embed.setThumbnail("https://laby.net/texture/profile/head/" + uuid + ".png?size=50&overlay");
+        }
+
+        webhook.addEmbed(embed);
         return webhook;
     }
 
