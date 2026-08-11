@@ -28,14 +28,20 @@ def labyApiFile = file("${buildDir}/dependencies/lm_api_mc1.8.9.jar")
 task downloadLabyModApi {
     outputs.file labyApiFile
     doLast {
+        if (labyApiFile.exists()) {
+            return
+        }
+
         labyApiFile.parentFile.mkdirs()
-        if (!labyApiFile.exists()) {
-            ant.get(
-                src: 'https://dl.labymod.net/latest/api/lm_api_mc1.8.9.jar',
-                dest: labyApiFile,
-                verbose: true,
-                usetimestamp: true
-            )
+        def connection = new URL('https://dl.labymod.net/latest/api/lm_api_mc1.8.9.jar').openConnection()
+        connection.setConnectTimeout(10000)
+        connection.setReadTimeout(30000)
+        connection.setRequestProperty('User-Agent', 'MineUtil-Gradle/1.4.0')
+
+        labyApiFile.withOutputStream { output ->
+            connection.getInputStream().withCloseable { input ->
+                output << input
+            }
         }
     }
 }
