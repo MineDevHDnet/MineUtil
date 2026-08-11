@@ -1,38 +1,51 @@
 package net.minedevhd.mineutil.modules.griefergames;
 
+import java.util.Locale;
 import java.util.Random;
 
 import net.labymod.api.events.MessageReceiveEvent;
 import net.labymod.core.LabyModCore;
-import net.minedevhd.mineutil.MineUtil;
 import net.minedevhd.mineutil.command.impl.MoneyDropGrabber;
 import net.minedevhd.mineutil.settings.UtilCore;
 
-public class MoneyDropGrabberModule implements UtilCore {
-	
-	private static final MoneyDropGrabber GRABBER = new MoneyDropGrabber();
-	
-	public static void initModule() {
-		mineUtil.getApi().getEventManager().register((MessageReceiveEvent) new MessageReceiveEvent() {
-			@Override
-			public boolean onReceive(String formatted, String unformatted) {
-				if(mineUtil.getSettings().isModEnabled() && mineUtil.isOnGrieferGames()) {
-					if(GRABBER.isActiv()) {
-						if(unformatted.toLowerCase().contains("wer will") || unformatted.contains("wer möchte")
-							&& ((unformatted.contains("k") || unformatted.contains("$"))) && !unformatted.contains("mir geben")) {
-							LabyModCore.getMinecraft().getPlayer().sendChatMessage(this.getGrabberMessage());
-						}
-			        }
-				}
-				return false;
-			}
-			
-			public final String getGrabberMessage() {
-				int rnd = new Random().nextInt(1);
-				return (rnd > 1 ? "Ich <3 #geier" : (rnd < 0 ? "Ich Bitte ;)" : "Ich ;)"));
-			}
+public final class MoneyDropGrabberModule implements UtilCore {
 
-		});
-	}
+    private static final MoneyDropGrabber GRABBER = new MoneyDropGrabber();
+    private static final Random RANDOM = new Random();
+    private static final String[] REPLIES = {
+            "Ich <3 #geier",
+            "Ich Bitte ;)",
+            "Ich ;)"
+    };
 
+    private MoneyDropGrabberModule() {
+    }
+
+    public static void initModule() {
+        mineUtil.getApi().getEventManager().register(new MessageReceiveEvent() {
+            @Override
+            public boolean onReceive(final String formatted, final String unformatted) {
+                if (!mineUtil.getSettings().isModEnabled()
+                        || !mineUtil.isOnGrieferGames()
+                        || !GRABBER.isActiv()
+                        || unformatted == null) {
+                    return false;
+                }
+
+                final String message = unformatted.toLowerCase(Locale.GERMAN);
+                final boolean asksWhoWants = message.contains("wer will") || message.contains("wer möchte");
+                final boolean mentionsMoney = message.contains("k") || message.contains("$");
+                final boolean asksForMoney = message.contains("mir geben");
+
+                if (asksWhoWants && mentionsMoney && !asksForMoney) {
+                    LabyModCore.getMinecraft().getPlayer().sendChatMessage(getGrabberMessage());
+                }
+                return false;
+            }
+        });
+    }
+
+    private static String getGrabberMessage() {
+        return REPLIES[RANDOM.nextInt(REPLIES.length)];
+    }
 }
