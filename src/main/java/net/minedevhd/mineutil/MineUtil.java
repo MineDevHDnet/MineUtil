@@ -2,29 +2,16 @@ package net.minedevhd.mineutil;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.authlib.GameProfile;
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.util.Locale;
 
 import net.labymod.api.LabyModAddon;
 import net.labymod.api.events.RenderIngameOverlayEvent;
 import net.labymod.core.LabyModCore;
-import net.labymod.core.asm.LabyModCoreMod;
 import net.labymod.ingamegui.Module;
 import net.labymod.ingamegui.ModuleCategory;
 import net.labymod.ingamegui.ModuleCategoryRegistry;
 import net.labymod.main.LabyMod;
-import net.labymod.main.Source;
-import net.labymod.mojang.inventory.GuiInventoryCustom;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.utils.Consumer;
@@ -34,20 +21,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.network.play.server.S03PacketTimeUpdate;
 import net.minecraft.util.ResourceLocation;
 import net.minedevhd.mineutil.command.Command;
 import net.minedevhd.mineutil.command.CommandManager;
-import net.minedevhd.mineutil.credits.Creditzz;
 import net.minedevhd.mineutil.helper.CleanHelper;
 import net.minedevhd.mineutil.helper.CraftHelper;
 import net.minedevhd.mineutil.helper.KeyStrokeHelper;
 import net.minedevhd.mineutil.helper.TickHelper;
-import net.minedevhd.mineutil.helper.TrustedUserHelper;
 import net.minedevhd.mineutil.helper.WerbungHelper;
 import net.minedevhd.mineutil.modules.CoordinatesModule;
 import net.minedevhd.mineutil.modules.DispalyCleanIngameModule;
@@ -74,162 +54,123 @@ import net.minedevhd.mineutil.modules.mods.grieferwert.GrieferWertMod;
 import net.minedevhd.mineutil.settings.ModSettings;
 import net.minedevhd.mineutil.utils.Exploit;
 import net.minedevhd.mineutil.utils.ModButton;
-import net.minedevhd.mineutil.utils.discord.Discord;
 import net.minedevhd.mineutil.utils.graf.RenderUtils;
-import net.minedevhd.mineutil.utils.tech.UpdateUtil;
 
 public class MineUtil extends LabyModAddon {
-	
+
+    private static final String VERSION = "1.4.0";
+    private static final String CHANGELOG_DATE = "11. August 2026";
+
+    public static final Integer CLIENT_COLOR = 0x6495ed;
+
     private static MineUtil mineUtil;
     private static ModSettings settings;
-    
-    private final static String VERSION = "1.3.92", 
-    							CHANGELOG_DATE = "08. November",
-    							DOWNLOAD_URL = "https://minedevhd.net/laby/mineutil/download/rel/MineUtil.jar";
 
-    private final String discordWebhook = "https://discord.com/api/webhooks/952161978556776488/tVcokazHcSgThA9uv-ZBBN2h4SXbTlMHrkWRbbIraDoF_jwu2qqqTTwiOYspF7jg809i",
-    					 discordAppId = "1001120927754502258";
-    
-    public final static Integer CLIENT_COLOR = 0x6495ed;
+    private final CleanHelper cleanHelper;
+    private final CraftHelper craftHelper;
 
-    private String cleanSelection = "",
-    			   craftSelection = "";
-    
+    private String cleanSelection = "";
+    private String craftSelection = "";
     private ServerData lastServer;
+    private boolean onGrieferGames;
+    private Float previousGamma;
+
     public ModuleCategory MINEUTIL_CATEGORY;
-    
-    private boolean onGrieferGames = false,
-    				guiToggled = false,
-    				guiOpend = false;
-    
     public boolean isGuiKeyPressed;
 
-    private final boolean DEVMODE = true;
-    
-    private final CleanHelper cleanHelper = new CleanHelper();
-    private final CraftHelper craftHelper = new CraftHelper();
-    
-    public static void main(final String[] args) {
-    	final JFrame frame = new JFrame();
-        JOptionPane.showMessageDialog(frame, "Addon für LabyMod 3-1.8.9 -> In '%appdata%/.minecraft/LabyMod/addons-1.8' kopieren", "MineUtil | Entwickelt von MineDev_HD", 2);
-    }
-    
-    public final static MineUtil getCore() {
-        return MineUtil.mineUtil;
-    }
-    
-    public final String getVersion() {
-		return this.VERSION + /*(this.VERSION.endsWith("0") ? */"-release"/* : "-beta")*/;
-	}
-    
-    public final Minecraft getMinecraft() {
-        return Minecraft.getMinecraft();
-    }
-    
-    private static final void setCore(final MineUtil mineUtil) {
-        MineUtil.mineUtil = mineUtil;
-    }
-    
-    public final ModSettings getSettings() {
-        return MineUtil.settings;
-    }
-    
-    private final void setSettings(final ModSettings settings) {
-        MineUtil.settings = settings;
-    }
-    
-    public static class CCGui {
-    	
-    	private static boolean guiToggled = false;
-    	private static boolean guiOpend = false;
-    	    
-    	public static final void setGUIToggled(final boolean guiToggled) {
-    		CCGui.guiToggled = guiToggled;
-        }
-        
-        public static final boolean isGUIToggled() {
-            return guiToggled;
-        }
-        
-        public static final void setGUIOpend(final boolean guiOpend) {
-        	CCGui.guiOpend = guiOpend;
-        }
-        
-        public static final boolean isGUIOpend() {
-            return guiOpend;
-        }
-    	
-    }
-    
-    public boolean isOnGrieferGames() {
-		return this.onGrieferGames;
-	}
-    
-    public void setGrieferGames(boolean onGrieferGames) {
-		this.onGrieferGames = onGrieferGames;
-	}
-    
-    public final CleanHelper getCleanHelper() {
-		return this.cleanHelper;
-	}
-    
-    public final CraftHelper getCraftHelper() {
-		return this.craftHelper;
-	}
-    
-    public final String getCleanSelection() {
-        return this.cleanSelection;
-    }
-    
-    public final void setCleanSelection(final String cleanSelection) {
-        this.cleanSelection = cleanSelection;
-    }
-    
-    public final String getCraftSelection() {
-        return this.craftSelection;
-    }
-    
-    public final void setCraftSelection(final String craftSelection) {
-        this.craftSelection = craftSelection;
-    }
-    
     public MineUtil() {
+        // Set the singleton before helper/settings classes can resolve UtilCore.mineUtil.
+        setCore(this);
+        setSettings(new ModSettings());
+        this.cleanHelper = new CleanHelper();
+        this.craftHelper = new CraftHelper();
         this.isGuiKeyPressed = false;
     }
-    
-    public void onEnable() {
-        if(!this.isValidUser() && !this.isIDE()) {
-    		Discord.write(this.discordWebhook, "Login Viewer", "Player " + this.getMinecraft().getSession().getProfile().getName() + " tried to play LabyMod with MineUtil-b" + this.getVersion() + "!", this.getMinecraft().getSession().getProfile().getId(), Color.RED);
-    		this.strike();
+
+    public static MineUtil getCore() {
+        return mineUtil;
+    }
+
+    private static void setCore(final MineUtil core) {
+        mineUtil = core;
+    }
+
+    public String getVersion() {
+        return VERSION + "-release";
+    }
+
+    public Minecraft getMinecraft() {
+        return Minecraft.getMinecraft();
+    }
+
+    public ModSettings getSettings() {
+        return settings;
+    }
+
+    private void setSettings(final ModSettings modSettings) {
+        settings = modSettings;
+    }
+
+    public static final class CCGui {
+        private static boolean guiToggled;
+        private static boolean guiOpend;
+
+        private CCGui() {
         }
 
-        this.setCore(this);
-    	this.setSettings(new ModSettings());
-        new File(Minecraft.getMinecraft().mcDataDir, "MineUtil\\head_textures\\mkdir.png").getParentFile().mkdirs();
+        public static void setGUIToggled(final boolean toggled) {
+            guiToggled = toggled;
+        }
 
-        ModuleCategoryRegistry.loadCategory(this.MINEUTIL_CATEGORY = new ModuleCategory("MineUtil", true, 
-    			new ControlElement.IconData(new ResourceLocation("labymod/addons/MineUtil/textures/utillogo.jpg"))));
+        public static boolean isGUIToggled() {
+            return guiToggled;
+        }
 
-    	this.getApi().registerForgeListener((Object) new TickHelper());
-        this.getApi().registerForgeListener((Object) new RepairCostMod());
-        this.getApi().registerForgeListener((Object) new PlotChatIndicator());
-        this.getApi().registerForgeListener((Object) new GrieferWertMod());
-        this.getApi().registerForgeListener((Object) new TrajectoriesMod());
-        this.getApi().registerForgeListener((Object) new KeyStrokeHelper());
-        this.getApi().registerForgeListener((Object) new MapPreviewModule());
-        this.getApi().registerForgeListener((Object) new ToolSaveMod());
-        new GrieferWertMod().loadPrices();
+        public static void setGUIOpend(final boolean opened) {
+            guiOpend = opened;
+        }
 
-        this.getApi().registerModule((Module) new MiniMeModule());
-        this.getApi().registerModule((Module) new SkinHeadModule());
-        this.getApi().registerModule((Module) new HeadOwnerModule());
-        this.getApi().registerModule((Module) new ShowMCNameModule());
-        this.getApi().registerModule((Module) new KeyStrokesModule());
-        this.getApi().registerModule((Module) new CoordinatesModule());
-        this.getApi().registerModule((Module) new DispalyCraftIngameModule());
-        this.getApi().registerModule((Module) new DispalyCleanIngameModule());
+        public static boolean isGUIOpend() {
+            return guiOpend;
+        }
+    }
 
-        /* received messages */
+    @Override
+    public void onEnable() {
+        final File textureDirectory = new File(getMinecraft().mcDataDir, "MineUtil/head_textures");
+        if (!textureDirectory.exists() && !textureDirectory.mkdirs()) {
+            System.err.println("[MineUtil] Could not create head texture directory: " + textureDirectory);
+        }
+
+        MINEUTIL_CATEGORY = new ModuleCategory(
+                "MineUtil",
+                true,
+                new ControlElement.IconData(new ResourceLocation("labymod/addons/MineUtil/textures/utillogo.jpg"))
+        );
+        ModuleCategoryRegistry.loadCategory(MINEUTIL_CATEGORY);
+
+        getApi().registerForgeListener(new TickHelper());
+        getApi().registerForgeListener(new RepairCostMod());
+        getApi().registerForgeListener(new PlotChatIndicator());
+
+        final GrieferWertMod grieferWertMod = new GrieferWertMod();
+        getApi().registerForgeListener(grieferWertMod);
+        grieferWertMod.loadPrices();
+
+        getApi().registerForgeListener(new TrajectoriesMod());
+        getApi().registerForgeListener(new KeyStrokeHelper());
+        getApi().registerForgeListener(new MapPreviewModule());
+        getApi().registerForgeListener(new ToolSaveMod());
+
+        getApi().registerModule((Module) new MiniMeModule());
+        getApi().registerModule((Module) new SkinHeadModule());
+        getApi().registerModule((Module) new HeadOwnerModule());
+        getApi().registerModule((Module) new ShowMCNameModule());
+        getApi().registerModule((Module) new KeyStrokesModule());
+        getApi().registerModule((Module) new CoordinatesModule());
+        getApi().registerModule((Module) new DispalyCraftIngameModule());
+        getApi().registerModule((Module) new DispalyCleanIngameModule());
+
         SudoModule.initModule();
         AFKMSGModule.initModule();
         RealMoneyModule.initModule();
@@ -241,145 +182,166 @@ public class MineUtil extends LabyModAddon {
         GlobalchatDiscordWriter.initModule();
         WerbungHelper.$witch();
 
-        /* command base */
         Command.initCmdBase();
-
-        this.getApi().getEventManager().register(new RenderIngameOverlayEvent() {
-			@Override
-			public void onRender(float f) {
-				try {
-					if(mineUtil.getSettings().isModEnabled()) {
-						final FontRenderer font = getMinecraft().fontRendererObj;
-						final ArrayList<Command> commands = new ArrayList<Command>();
-						
-						for(Command c : CommandManager.getCommands())
-							if(c.isActiv()) commands.add(c);
-						
-//		        	@Info: Sortiert die Liste nach Text-länge von oben nach unten.
-//		    		commands.sort((m1, m2) -> font.getStringWidth(m2.getName()) - font.getStringWidth(m1.getName()));
-						
-						int y = 0;
-						for(Command cmds : commands) {
-							renderModule(getMinecraft(), RenderUtils.getResolution(), y, font.getStringWidth(cmds.getDisplayName()), cmds.getDisplayName());
-							y += 10;
-						}
-						
-						/** Mod-Name Renderer */
-						final ScaledResolution sr = new ScaledResolution(mineUtil.getMinecraft());
-						final String text = "MineUtil | b" + mineUtil.getVersion()/* + " | " + mineUtil.getMCCore().getDebugFPS()*/;
-						final Integer i = mineUtil.getMinecraft().fontRendererObj.getStringWidth(text);
-						
-						GuiScreen.drawRect(5, 15, i + 6, 5, new Color(0, 0, 0, 130).getRGB());
-						GuiScreen.drawRect(5, 14, i + 6, 15, ModButton.toRainbow(18));
-						new Gui().drawString(mineUtil.getMinecraft().fontRendererObj, text, 6, 6, 16777215);
-					}
-				} catch (Exception exception) {}	
-			}
-		});
-        
-        this.getApi().getEventManager().registerOnJoin((Consumer<ServerData>) new Consumer<ServerData>() {
-			public void accept(ServerData serverData) {
-				if(mineUtil.getSettings().isModEnabled()) {
-//					LabyMod.getInstance().getGuiCustomAchievement().displayAchievement("MineUtil", "Danke, dass du die MineUtil benutzt!");
-					LabyMod.getInstance().getGuiCustomAchievement()
-						.displayAchievement("https://cdn.discordapp.com/attachments/994561651468668958/994561673551695962/utillogo.jpg",
-								"MineUtil b" + mineUtil.getVersion(), String.format("Danke, dass du die MineUtil benutzt!", ""));
-					mineUtil.setLastServer(serverData);
-
-					if(serverData.getIp().contains("griefergames")) {
-						mineUtil.setGrieferGames(true);
-						if(mineUtil.getSettings().isModGGAutoPortal())
-							MineUtil.getCore().getMinecraft().thePlayer.sendChatMessage("/portal");
-						Exploit.GrieferGames.MysteryMod.startProxy();
-					}
-					else {
-						mineUtil.setGrieferGames(false);
-						if(serverData.getIp().contains("minedevhd.net")) { return; }
-					}
-				}
-			}
-		});
+        registerOverlayRenderer();
+        registerJoinListener();
         Exploit.HeadDownloader.register();
 
-        if(this.getSettings().isModFullbright())
-        	MineUtil.getCore().getMinecraft().gameSettings.gammaSetting = 10.0f;
-        else
-    		MineUtil.getCore().getMinecraft().gameSettings.gammaSetting = 1.0f;
+        previousGamma = getMinecraft().gameSettings.gammaSetting;
+        if (getSettings().isModFullbright()) {
+            getMinecraft().gameSettings.gammaSetting = 10.0F;
+        }
     }
-    
+
+    private void registerOverlayRenderer() {
+        getApi().getEventManager().register(new RenderIngameOverlayEvent() {
+            @Override
+            public void onRender(final float partialTicks) {
+                if (getSettings() == null || !getSettings().isModEnabled()) {
+                    return;
+                }
+
+                final Minecraft minecraft = getMinecraft();
+                if (minecraft == null || minecraft.fontRendererObj == null) {
+                    return;
+                }
+
+                final FontRenderer font = minecraft.fontRendererObj;
+                int y = 0;
+                for (final Command command : CommandManager.getCommands()) {
+                    if (!command.isActiv()) {
+                        continue;
+                    }
+
+                    final String displayName = command.getDisplayName();
+                    renderModule(minecraft, RenderUtils.getResolution(), y, font.getStringWidth(displayName), displayName);
+                    y += 10;
+                }
+
+                final String text = "MineUtil | b" + getVersion();
+                final int width = font.getStringWidth(text);
+                GuiScreen.drawRect(5, 5, width + 6, 15, new Color(0, 0, 0, 130).getRGB());
+                GuiScreen.drawRect(5, 14, width + 6, 15, ModButton.toRainbow(18));
+                new Gui().drawString(font, text, 6, 6, 0xFFFFFF);
+            }
+        });
+    }
+
+    private void registerJoinListener() {
+        getApi().getEventManager().registerOnJoin(new Consumer<ServerData>() {
+            @Override
+            public void accept(final ServerData serverData) {
+                setLastServer(serverData);
+
+                if (getSettings() == null || !getSettings().isModEnabled()) {
+                    setGrieferGames(false);
+                    return;
+                }
+
+                LabyMod.getInstance().getGuiCustomAchievement().displayAchievement(
+                        "MineUtil",
+                        "MineUtil b" + getVersion() + " ist aktiv."
+                );
+
+                if (serverData == null || serverData.getIp() == null) {
+                    setGrieferGames(false);
+                    return;
+                }
+
+                final String ip = serverData.getIp().toLowerCase(Locale.ROOT);
+                final boolean grieferGames = ip.contains("griefergames");
+                setGrieferGames(grieferGames);
+
+                if (!grieferGames) {
+                    return;
+                }
+
+                if (getSettings().isModGGAutoPortal() && getMinecraft().thePlayer != null) {
+                    getMinecraft().thePlayer.sendChatMessage("/portal");
+                }
+
+                if (getSettings().isMysteryModProxy()) {
+                    Exploit.GrieferGames.MysteryMod.startProxy();
+                }
+            }
+        });
+    }
+
     @Override
     public void onDisable() {
-//    	try {
-//			UpdateUtil.downloadFile(this.DOWNLOAD_URL, "MineUtil.jar");
-//		} catch (Exception exception) {}
-    	Discord.write(this.getDiscordWebhook(), "Login Viewer", "Player " + this.getMinecraft().getSession().getProfile().getName() + " is now offline.", Color.ORANGE);
-    	super.onDisable();
-    }
-    
-	private void renderModule(final Minecraft mc, final ScaledResolution sr, final int height, final int length, final String string) {
-    	GuiScreen.drawRect(sr.getScaledWidth(), height + 1, sr.getScaledWidth() - length - 5, height + 11, new Color(0, 0, 0, 130).getRGB());
-    	GuiScreen.drawRect(sr.getScaledWidth(), height + 1, sr.getScaledWidth() - 2, height + 11, ModButton.toRainbow(18));
-    	new Gui().drawString(mc.fontRendererObj, string, sr.getScaledWidth() - length - 3, height + 2, 16777215);
-    }
-
-	public boolean isValidUser() {
-		if(!LabyMod.isForge())
-			this.strike();
-
-		final GameProfile profile = Minecraft.getMinecraft().getSession().getProfile();
-
-		TrustedUserHelper.loadUUIDConfigs();
-	  /*try {
-			int r = new InputStreamReader(new URL("https://minedevhd.net/laby/whitelist/" + profile.getId().toString() + ".txt").openStream()).read();
-			return ((char) r) == '1';
-		} catch (IOException exception) {}*/
-        if(TrustedUserHelper.contains(profile.getId())) {
-        	Discord.write(this.discordWebhook, "Login Viewer", "Player " + this.getMinecraft().getSession().getProfile().getName() + " plays now LabyMod with MineUtil-b" + this.getVersion() + "!", this.getMinecraft().getSession().getProfile().getId(), Color.GREEN);
-            return true;
+        if (previousGamma != null && getMinecraft() != null && getMinecraft().gameSettings != null) {
+            getMinecraft().gameSettings.gammaSetting = previousGamma;
         }
-        return false;
+        super.onDisable();
     }
 
-	public void loadConfig() {
-        this.getSettings().loadConfig();
-    }
-    
-    protected void fillSettings(final List<SettingsElement> settings) {
-        this.getSettings().fillSettings(settings);
-    }
-    
-    public final String getChangelogDate() {
-    	return this.CHANGELOG_DATE;
-    }
-    
-    public boolean isIDE() {
-    	final GameProfile profile = Minecraft.getMinecraft().getSession().getProfile();
-    	return (profile.getName().startsWith("Player") ? (LabyMod.getInstance().isPremium() ? false : true) : false);
-//		return this.DEVMODE;
-	}
-    
-    public final String getDiscordWebhook() {
-		return this.discordWebhook;
-	}
-
-	public final String getDiscordAppId() {
-		return this.discordAppId;
-	}
-
-    private void strike() {
-    	((String) null).substring(-1, -1).concat(null).charAt(45);
+    private void renderModule(final Minecraft minecraft, final ScaledResolution resolution,
+                              final int height, final int length, final String text) {
+        final int right = resolution.getScaledWidth();
+        final int left = right - length - 5;
+        GuiScreen.drawRect(left, height + 1, right, height + 11, new Color(0, 0, 0, 130).getRGB());
+        GuiScreen.drawRect(right - 2, height + 1, right, height + 11, ModButton.toRainbow(18));
+        new Gui().drawString(minecraft.fontRendererObj, text, right - length - 3, height + 2, 0xFFFFFF);
     }
 
-	public ServerData getLastServer() {
-		return this.lastServer;
-	}
+    public boolean isOnGrieferGames() {
+        return onGrieferGames;
+    }
 
-	public void setLastServer(ServerData serverData) {
-		this.lastServer = serverData;
-	}
-	
-	public void sendQueued(final String message) {
-		LabyModCore.getMinecraft().getPlayer().sendChatMessage(message);
-	}
-	
+    public void setGrieferGames(final boolean value) {
+        onGrieferGames = value;
+    }
+
+    public CleanHelper getCleanHelper() {
+        return cleanHelper;
+    }
+
+    public CraftHelper getCraftHelper() {
+        return craftHelper;
+    }
+
+    public String getCleanSelection() {
+        return cleanSelection;
+    }
+
+    public void setCleanSelection(final String selection) {
+        cleanSelection = selection == null ? "" : selection;
+    }
+
+    public String getCraftSelection() {
+        return craftSelection;
+    }
+
+    public void setCraftSelection(final String selection) {
+        craftSelection = selection == null ? "" : selection;
+    }
+
+    @Override
+    public void loadConfig() {
+        getSettings().loadConfig();
+    }
+
+    @Override
+    protected void fillSettings(final List<SettingsElement> settingsElements) {
+        getSettings().fillSettings(settingsElements);
+    }
+
+    public String getChangelogDate() {
+        return CHANGELOG_DATE;
+    }
+
+    public ServerData getLastServer() {
+        return lastServer;
+    }
+
+    public void setLastServer(final ServerData serverData) {
+        lastServer = serverData;
+    }
+
+    public void sendQueued(final String message) {
+        if (message == null || message.trim().isEmpty()) {
+            return;
+        }
+        LabyModCore.getMinecraft().getPlayer().sendChatMessage(message);
+    }
 }
