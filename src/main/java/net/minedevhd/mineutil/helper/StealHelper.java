@@ -1,52 +1,65 @@
 package net.minedevhd.mineutil.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minedevhd.mineutil.MineUtil;
 import net.minedevhd.mineutil.settings.UtilCore;
 
-public class StealHelper implements UtilCore {
-	
-	private static TimeHelper time = new TimeHelper();
-	
-	public static void drop(final EntityPlayerSP player, final PlayerControllerMP playerCtrl, final Container container) {
-		final ContainerChest chest = (ContainerChest) container;
-		
-		for (int i = 0; i < chest.getLowerChestInventory().getSizeInventory(); ++i) {
-            if(chest.getLowerChestInventory().getStackInSlot(i) != null && time.hasReached(75L)) {
-                final ItemStack itemStack = chest.getLowerChestInventory().getStackInSlot(i);
-                if(itemStack != null) {
-                    playerCtrl.windowClick(chest.windowId, i, 2, 4, player);
-                }
-                time.reset();
-            }
-        }
-	}
-	
-	public static void steal(final EntityPlayerSP player, final PlayerControllerMP playerCtrl, final Container container) {
-		final ContainerChest chest = (ContainerChest) container;
-		
-		for (int i = 0; i < chest.getLowerChestInventory().getSizeInventory(); ++i) {
-            if(chest.getLowerChestInventory().getStackInSlot(i) != null && time.hasReached(75L)) {
-                final ItemStack itemStack = chest.getLowerChestInventory().getStackInSlot(i);
-                if(itemStack != null) {
-                    playerCtrl.windowClick(chest.windowId, i, 0, 1, player);
-                }
-                time.reset();
-            }
-        }
-	}
+public final class StealHelper implements UtilCore {
 
+    private static final TimeHelper ACTION_DELAY = new TimeHelper();
+    private static final long DELAY_MS = 75L;
+
+    private StealHelper() {
+    }
+
+    public static void drop(final EntityPlayerSP player,
+                            final PlayerControllerMP playerController,
+                            final Container container) {
+        if (!(container instanceof ContainerChest)
+                || player == null
+                || playerController == null
+                || !ACTION_DELAY.hasReached(DELAY_MS)) {
+            return;
+        }
+
+        final ContainerChest chest = (ContainerChest) container;
+        for (int slot = 0; slot < chest.getLowerChestInventory().getSizeInventory(); slot++) {
+            final ItemStack stack = chest.getLowerChestInventory().getStackInSlot(slot);
+            if (stack == null) {
+                continue;
+            }
+
+            // mode 4 = drop; button 1 drops the complete stack.
+            playerController.windowClick(chest.windowId, slot, 1, 4, player);
+            ACTION_DELAY.reset();
+            return;
+        }
+    }
+
+    public static void steal(final EntityPlayerSP player,
+                             final PlayerControllerMP playerController,
+                             final Container container) {
+        if (!(container instanceof ContainerChest)
+                || player == null
+                || playerController == null
+                || !ACTION_DELAY.hasReached(DELAY_MS)) {
+            return;
+        }
+
+        final ContainerChest chest = (ContainerChest) container;
+        for (int slot = 0; slot < chest.getLowerChestInventory().getSizeInventory(); slot++) {
+            final ItemStack stack = chest.getLowerChestInventory().getStackInSlot(slot);
+            if (stack == null) {
+                continue;
+            }
+
+            // mode 1 = shift-click into the player inventory.
+            playerController.windowClick(chest.windowId, slot, 0, 1, player);
+            ACTION_DELAY.reset();
+            return;
+        }
+    }
 }
