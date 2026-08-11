@@ -25,10 +25,8 @@ jobs:
           curl --fail --location --retry 3 --output /tmp/gradle.zip https://services.gradle.org/distributions/gradle-2.14.1-bin.zip
           unzip -q /tmp/gradle.zip -d /tmp
 
-      - name: Download LabyMod 3 API
-        run: |
-          mkdir -p build/dependencies
-          curl --fail --location --retry 3 --user-agent 'MineUtil-CI/1.4.0' --output build/dependencies/lm_api_mc1.8.9.jar https://dl.labymod.net/latest/api/lm_api_mc1.8.9.jar
+      - name: Audit LabyMod API surface
+        run: grep -Rho '^import net\.labymod[^;]*;' src/main/java | sort -u || true
 
       - name: Build
         run: /tmp/gradle-2.14.1/bin/gradle --no-daemon --stacktrace clean build
@@ -41,7 +39,7 @@ jobs:
           unzip -p "$JAR" addon.json > /tmp/addon.json
           grep -q '"mainClass"' /tmp/addon.json
           if unzip -l "$JAR" | grep -q 'net/labymod/'; then
-            echo 'LabyMod API classes were accidentally packaged.' >&2
+            echo 'LabyMod compile stubs were accidentally packaged.' >&2
             exit 1
           fi
           sha256sum "$JAR"
