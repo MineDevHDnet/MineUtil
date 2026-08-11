@@ -51,6 +51,15 @@ public final class HeadDownloaderUtil implements UtilCore {
     private static final String INTERNAL_COMMAND = "/mmucp_hod";
     private static final String ALLOWED_TEXTURE_HOST = "textures.minecraft.net";
 
+    /** @deprecated compile-only bridge for the disabled legacy Exploit.HeadDownloader implementation. */
+    @Deprecated
+    public static final JsonParser jsonParser = JSON_PARSER;
+
+    /** @deprecated compile-only bridge for the disabled legacy Exploit.HeadDownloader implementation. */
+    @Deprecated
+    public static final java.text.SimpleDateFormat fileformat =
+            new java.text.SimpleDateFormat("dd.MM.yyyy HH-mm-ss-SSS");
+
     private static final ThreadPoolExecutor DOWNLOAD_EXECUTOR = new ThreadPoolExecutor(
             1,
             1,
