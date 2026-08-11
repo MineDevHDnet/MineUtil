@@ -1,16 +1,16 @@
 package net.minedevhd.mineutil.helper;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+
 import org.lwjgl.input.Keyboard;
 
 import net.labymod.main.LabyMod;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minedevhd.mineutil.MineUtil;
 import net.minedevhd.mineutil.MineUtil.CCGui;
 import net.minedevhd.mineutil.games.GameGui;
-import net.minedevhd.mineutil.games.pong.PongGameFrame;
-import net.minedevhd.mineutil.games.pong.PongGame;
 import net.minedevhd.mineutil.gui.cleanandcraft.CleanCraftClayGui;
 import net.minedevhd.mineutil.gui.cleanandcraft.CleanCraftColorGui;
 import net.minedevhd.mineutil.gui.cleanandcraft.CleanCraftFoodGui;
@@ -28,97 +28,136 @@ import net.minedevhd.mineutil.gui.cleanandcraft.NextGenCraftGui;
 import net.minedevhd.mineutil.settings.UtilCore;
 import net.minedevhd.mineutil.utils.HeadOwnerUtil;
 
-public class KeyStrokeHelper implements UtilCore {
+public final class KeyStrokeHelper implements UtilCore {
 
-	private final Minecraft mc = mineUtil.getMinecraft();
-	
     @SubscribeEvent
     public void onKeyPress(final InputEvent.KeyInputEvent event) {
-        if(mineUtil.getSettings().getModMenuKey() != -1) {
-	        if(Keyboard.isKeyDown((int) mineUtil.getSettings().getModMenuKey())) {
-	        	if(mineUtil.getSettings().isModEnabled()) {
-		        	switch(mineUtil.getSettings().getCurrentGuiPage()) {
-					case 1:
-						this.mc.displayGuiScreen(new CleanCraftOreGui());
-						break;
-					case 2:
-						this.mc.displayGuiScreen(new CleanCraftStoneGui());
-						break;
-					case 3:
-						this.mc.displayGuiScreen(new CleanCraftSandGui());
-						break;
-					case 4:
-						this.mc.displayGuiScreen(new CleanCraftRedstoneGui());
-						break;
-					case 5:
-						this.mc.displayGuiScreen(new CleanCraftNetherGui());
-						break;
-					case 6:
-						this.mc.displayGuiScreen(new CleanCraftPrismarineGui());
-						break;
-					case 7:
-						this.mc.displayGuiScreen(new CleanCraftOthersGui());
-						break;
-					case 8:
-						this.mc.displayGuiScreen(new CleanCraftOthers2Gui());
-						break;
-					case 9:
-						this.mc.displayGuiScreen(new CleanCraftWoolGui());
-						break;
-					case 10:
-						this.mc.displayGuiScreen(new CleanCraftGlassGui());
-						break;
-					case 11:
-						this.mc.displayGuiScreen(new CleanCraftClayGui());
-						break;
-					case 12:
-						this.mc.displayGuiScreen(new CleanCraftColorGui());
-						break;
-					case 13:
-						this.mc.displayGuiScreen(new CleanCraftFoodGui());
-						break;
-					default:
-						this.mc.displayGuiScreen(new CleanCraftOreGui());
-						break;
-					}
-	        		CCGui.setGUIToggled(!CCGui.isGUIToggled());
-	        	}
-	        	else
-		        	LabyMod.getInstance().displayMessageInChat(mineUtil.getSettings().getPrefix() 
-		        			+ "§cThe addon is deactivated also the crafter (guis) is not availabe!");
-        	}
-	        else
-	        	if(Keyboard.isKeyDown((int) mineUtil.getSettings().getModHeadOwnerKey())) {
-	                final HeadOwnerUtil.Skull skull = HeadOwnerUtil.getSkullLooking();
-	                final String name = skull.getCopy();
-	                
-	                if(mineUtil.getSettings().isModEnabled())
-	                	LabyMod.getInstance().displayMessageInChat(mineUtil.getSettings().getPrefix() 
-	    	        			+ "§cThe addon is deactivated also the headowner mod is not availabe!");
-	                else
-		                try {
-		                	mineUtil.getApi().displayMessageInChat(mineUtil.getSettings().getPrefix() + "§aHeader data has been copied to the clipboard.");
-		                } catch(Exception exception) {
-		                	mineUtil.getApi().displayMessageInChat(mineUtil.getSettings().getPrefix() + "§cCan't modify clipboard :/");
-		                }
-		        }
-	        	else
-		    		if(Keyboard.isKeyDown((int) mineUtil.getSettings().getModNGMenuKey())) {
-		    			if(mineUtil.getSettings().isModEnabled())
-		    				this.mc.displayGuiScreen(new NextGenCraftGui());
-		    			else
-		    				LabyMod.getInstance().displayMessageInChat(mineUtil.getSettings().getPrefix() 
-		    	        			+ "§cThe addon is deactivated also the next-gen crafter (guis) is not availabe!");
-			        }
-		    		else
-			    		if(Keyboard.isKeyDown((int) mineUtil.getSettings().getGameGuiKey())) {
-							if(mineUtil.getSettings().isModEnabled())
-								this.mc.displayGuiScreen(new GameGui());
-							else
-								LabyMod.getInstance().displayMessageInChat(mineUtil.getSettings().getPrefix() 
-					        			+ "§cThe addon is deactivated also all games are not availabe!");
-				        }
+        if (!Keyboard.getEventKeyState()) {
+            return;
         }
-        
+
+        final int pressedKey = Keyboard.getEventKey();
+        if (pressedKey == Keyboard.KEY_NONE || mineUtil.getSettings() == null) {
+            return;
+        }
+
+        if (matchesConfiguredKey(pressedKey, mineUtil.getSettings().getModMenuKey())) {
+            openClassicMenu();
+            return;
+        }
+
+        if (matchesConfiguredKey(pressedKey, mineUtil.getSettings().getModHeadOwnerKey())) {
+            copyHeadOwnerData();
+            return;
+        }
+
+        if (matchesConfiguredKey(pressedKey, mineUtil.getSettings().getModNGMenuKey())) {
+            if (requireEnabled("§cThe addon is deactivated, so the next-gen crafter is unavailable!")) {
+                getMinecraft().displayGuiScreen(new NextGenCraftGui());
+            }
+            return;
+        }
+
+        if (matchesConfiguredKey(pressedKey, mineUtil.getSettings().getGameGuiKey())) {
+            if (requireEnabled("§cThe addon is deactivated, so the games are unavailable!")) {
+                getMinecraft().displayGuiScreen(new GameGui());
+            }
+        }
+    }
+
+    private boolean matchesConfiguredKey(final int pressedKey, final Integer configuredKey) {
+        return configuredKey != null && configuredKey != -1 && pressedKey == configuredKey;
+    }
+
+    private Minecraft getMinecraft() {
+        return mineUtil.getMinecraft();
+    }
+
+    private boolean requireEnabled(final String disabledMessage) {
+        if (mineUtil.getSettings().isModEnabled()) {
+            return true;
+        }
+        LabyMod.getInstance().displayMessageInChat(mineUtil.getSettings().getPrefix() + disabledMessage);
+        return false;
+    }
+
+    private void openClassicMenu() {
+        if (!requireEnabled("§cThe addon is deactivated, so the crafter menus are unavailable!")) {
+            return;
+        }
+
+        switch (mineUtil.getSettings().getCurrentGuiPage()) {
+            case 1:
+                getMinecraft().displayGuiScreen(new CleanCraftOreGui());
+                break;
+            case 2:
+                getMinecraft().displayGuiScreen(new CleanCraftStoneGui());
+                break;
+            case 3:
+                getMinecraft().displayGuiScreen(new CleanCraftSandGui());
+                break;
+            case 4:
+                getMinecraft().displayGuiScreen(new CleanCraftRedstoneGui());
+                break;
+            case 5:
+                getMinecraft().displayGuiScreen(new CleanCraftNetherGui());
+                break;
+            case 6:
+                getMinecraft().displayGuiScreen(new CleanCraftPrismarineGui());
+                break;
+            case 7:
+                getMinecraft().displayGuiScreen(new CleanCraftOthersGui());
+                break;
+            case 8:
+                getMinecraft().displayGuiScreen(new CleanCraftOthers2Gui());
+                break;
+            case 9:
+                getMinecraft().displayGuiScreen(new CleanCraftWoolGui());
+                break;
+            case 10:
+                getMinecraft().displayGuiScreen(new CleanCraftGlassGui());
+                break;
+            case 11:
+                getMinecraft().displayGuiScreen(new CleanCraftClayGui());
+                break;
+            case 12:
+                getMinecraft().displayGuiScreen(new CleanCraftColorGui());
+                break;
+            case 13:
+                getMinecraft().displayGuiScreen(new CleanCraftFoodGui());
+                break;
+            default:
+                getMinecraft().displayGuiScreen(new CleanCraftOreGui());
+                break;
+        }
+        CCGui.setGUIToggled(!CCGui.isGUIToggled());
+    }
+
+    private void copyHeadOwnerData() {
+        if (!requireEnabled("§cThe addon is deactivated, so the head-owner module is unavailable!")) {
+            return;
+        }
+
+        final HeadOwnerUtil.Skull skull = HeadOwnerUtil.getSkullLooking();
+        if (skull == null || !skull.isShown()) {
+            mineUtil.getApi().displayMessageInChat(
+                    mineUtil.getSettings().getPrefix() + "§cNo player head is currently targeted."
+            );
+            return;
+        }
+
+        try {
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+                    new StringSelection(skull.getCopy()),
+                    null
+            );
+            mineUtil.getApi().displayMessageInChat(
+                    mineUtil.getSettings().getPrefix() + "§aHead data copied to the clipboard."
+            );
+        } catch (final RuntimeException exception) {
+            mineUtil.getApi().displayMessageInChat(
+                    mineUtil.getSettings().getPrefix() + "§cCouldn't access the clipboard."
+            );
+        }
     }
 }

@@ -1,55 +1,62 @@
 package net.minedevhd.mineutil.modules;
 
 import net.labymod.ingamegui.ModuleCategory;
-import net.labymod.ingamegui.ModuleCategoryRegistry;
 import net.labymod.ingamegui.moduletypes.SimpleModule;
 import net.labymod.settings.elements.ControlElement;
 import net.labymod.utils.Material;
-import net.minedevhd.mineutil.MineUtil;
 import net.minedevhd.mineutil.settings.UtilCore;
 import net.minedevhd.mineutil.utils.HeadOwnerUtil;
-import net.minedevhd.mineutil.utils.HeadOwnerUtil.Skull;
 
-public class HeadOwnerModule extends SimpleModule implements UtilCore {
-	
+public final class HeadOwnerModule extends SimpleModule implements UtilCore {
+
+    @Override
     public String getDisplayName() {
         return "HeadOwner";
     }
-	
+
+    @Override
     public String getDisplayValue() {
         final HeadOwnerUtil.Skull skull = HeadOwnerUtil.getSkullLooking();
-        return skull.getDisplay();
+        return skull == null ? "?" : skull.getDisplay();
     }
-    
+
+    @Override
     public String getDefaultValue() {
         return "?";
     }
-    
+
+    @Override
     public ControlElement.IconData getIconData() {
         return new ControlElement.IconData(Material.SKULL_ITEM);
     }
-    
-    public void loadSettings() {}
-    
+
+    @Override
+    public void loadSettings() {
+    }
+
+    @Override
     public String getSettingName() {
         return "HeadOwner";
     }
-    
+
+    @Override
     public String getDescription() {
         return "Shows the owner of the head you're looking at.";
     }
-    
+
+    @Override
     public int getSortingId() {
         return 200;
     }
-    
+
+    @Override
     public ModuleCategory getCategory() {
         return mineUtil.MINEUTIL_CATEGORY;
     }
-    
+
+    @Override
     public boolean isShown() {
         final HeadOwnerUtil.Skull skull = HeadOwnerUtil.getSkullLooking();
-        return skull.isShown();
+        return skull != null && skull.isShown();
     }
-
 }

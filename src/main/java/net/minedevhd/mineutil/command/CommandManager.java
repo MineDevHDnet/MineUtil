@@ -1,79 +1,79 @@
 package net.minedevhd.mineutil.command;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import net.minedevhd.mineutil.MineUtil;
 import net.minedevhd.mineutil.command.impl.*;
 import net.minedevhd.mineutil.settings.UtilCore;
 
-public class CommandManager implements UtilCore {
-	
-	private static final List<Command> commands = new ArrayList<Command>();
-	private static final String DEFAULT_PREFIX = ".";
-	
-	public static final String getPrefix() {
-		if(mineUtil.getSettings().getCommandPrefix() == "" 
-				|| mineUtil.getSettings().getCommandPrefix() == null) {
-			return DEFAULT_PREFIX;
-		}
-		return mineUtil.getSettings().getCommandPrefix();
-	}
-	
-	public static final List<Command> getCommands() {
-		return commands;
-	}
-	
-	//TODO: changing help command & command-/module system
-	public static void setup() {
-		commands.clear();
+public final class CommandManager implements UtilCore {
 
-		//OTHER
-		commands.add(new Help());
-		commands.add(new NBT());
-		commands.add(new Join());
-		commands.add(new Author());
-		commands.add(new Reload());
-		commands.add(new LabyNet());
-		commands.add(new Credits());
-		commands.add(new Vote());
-//		commands.add(new Werbung()); (it's a little bit buggy) ;§
+    private static final List<Command> COMMANDS = new ArrayList<Command>();
+    private static final String DEFAULT_PREFIX = ".";
 
-		//MOVEMENT
-		commands.add(new Fly());
-//		commands.add(new Step()); (cannot disable)
-		commands.add(new Glide());
-		commands.add(new Sneak());
-		commands.add(new NoFall());
-		commands.add(new Sprint());
-		commands.add(new Parkour());
-		commands.add(new Dolphin());
-		commands.add(new Autowalk());
-		
-		//WORLD
-		commands.add(new KillArmorStands());
-		
-		//FUN
-		commands.add(new MoneyDropGrabber());
-		commands.add(new DlSkin());
-		
-		//PLAYER
-		commands.add(new AFK());
-		commands.add(new Say());
-//		commands.add(new FreeCam()); (cannot move)
-		commands.add(new AutoRespawn());
-		commands.add(new Autobreak());
-		commands.add(new AutouseItem());
-		commands.add(new Spammer());
-		
-//		EXPLOIT
-		commands.add(new Give());
-		commands.add(new CmdBook());
-//		commands.add(new Exploit()); /*(migrated crashskull + cickick into exploit command)*/
-//		commands.add(new CheckCmd()); (sends invalid packet)
-		commands.add(new Hologram());
-		commands.add(new ArmorSpammer());
-		commands.add(new MurderMystery());
-	}
-	
+    private CommandManager() {
+    }
+
+    public static String getPrefix() {
+        if (mineUtil == null || mineUtil.getSettings() == null) {
+            return DEFAULT_PREFIX;
+        }
+
+        final String configuredPrefix = mineUtil.getSettings().getCommandPrefix();
+        if (configuredPrefix == null || configuredPrefix.trim().isEmpty()) {
+            return DEFAULT_PREFIX;
+        }
+        return configuredPrefix;
+    }
+
+    public static List<Command> getCommands() {
+        return Collections.unmodifiableList(COMMANDS);
+    }
+
+    public static void setup() {
+        COMMANDS.clear();
+
+        // General
+        COMMANDS.add(new Help());
+        COMMANDS.add(new NBT());
+        COMMANDS.add(new Join());
+        COMMANDS.add(new Author());
+        COMMANDS.add(new Reload());
+        COMMANDS.add(new LabyNet());
+        COMMANDS.add(new Credits());
+        COMMANDS.add(new Vote());
+
+        // Movement
+        COMMANDS.add(new Fly());
+        COMMANDS.add(new Glide());
+        COMMANDS.add(new Sneak());
+        COMMANDS.add(new NoFall());
+        COMMANDS.add(new Sprint());
+        COMMANDS.add(new Parkour());
+        COMMANDS.add(new Dolphin());
+        COMMANDS.add(new Autowalk());
+
+        // World
+        COMMANDS.add(new KillArmorStands());
+
+        // Fun
+        COMMANDS.add(new MoneyDropGrabber());
+        COMMANDS.add(new DlSkin());
+
+        // Player
+        COMMANDS.add(new AFK());
+        COMMANDS.add(new Say());
+        COMMANDS.add(new AutoRespawn());
+        COMMANDS.add(new Autobreak());
+        COMMANDS.add(new AutouseItem());
+        COMMANDS.add(new Spammer());
+
+        // Legacy commands. Kept for compatibility; no new exploit behaviour is added here.
+        COMMANDS.add(new Give());
+        COMMANDS.add(new CmdBook());
+        COMMANDS.add(new Hologram());
+        COMMANDS.add(new ArmorSpammer());
+        COMMANDS.add(new MurderMystery());
+    }
 }
