@@ -4,53 +4,101 @@ import java.awt.Color;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class Discord {
-	
-	public static final void write(final String hook, final String title, final String message, final Color color) {
-		DiscordWebhook webhook = new DiscordWebhook(hook);
-	    webhook.setAvatarUrl("https://cdn.discordapp.com/attachments/994561651468668958/994561673551695962/utillogo.jpg");
-	    webhook.setUsername("MineUtil Bot");
-	    webhook.setTts(true);
-	    webhook.addEmbed(new DiscordWebhook.EmbedObject()
-	    .setTitle(title)
-	    .setDescription(message)
-        .setColor(color)
-        .addField("Date", Discord.getFormat("dd.MM.yyyy"), true)
-	    .addField("Time", Discord.getFormat("hh:mm:ss"), true));
-//	    webhook.addEmbed(new DiscordWebhook.EmbedObject()
-//	    .setDescription("Just another added embed object!"));
-	    try {
-			webhook.execute();
-		} catch (IOException exception) {}
-	}
-	
-	public static final void write(final String hook, final String title, final String message, final UUID uuid, final Color color) {
-		DiscordWebhook webhook = new DiscordWebhook(hook);
-	    webhook.setAvatarUrl("https://cdn.discordapp.com/attachments/994561651468668958/994561673551695962/utillogo.jpg");
-	    webhook.setUsername("MineUtil Bot");
-	    webhook.setTts(true);
-	    webhook.addEmbed(new DiscordWebhook.EmbedObject()
-	    .setTitle(title)
-	    .setDescription(message)
-        .setColor(color)
-        .addField("Date", Discord.getFormat("dd.MM.yyyy"), true)
-	    .addField("Time", Discord.getFormat("hh:mm:ss"), true)
-	    .setThumbnail("https://laby.net/texture/profile/head/" + uuid + ".png?size=50&overlay"));
-//	    webhook.addEmbed(new DiscordWebhook.EmbedObject()
-//	    .setDescription("Just another added embed object!"));
-	    try {
-			webhook.execute();
-		} catch (IOException exception) {}
-	}
-	
-	private static final String getFormat(final String format) {
-		final DateFormat df = new SimpleDateFormat(format);
-		final Date today = Calendar.getInstance().getTime();
-		return df.format(today);
-	}
+public final class Discord {
 
+    private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
+            1,
+            1,
+            0L,
+            TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<Runnable>(100),
+            new ThreadFactory() {
+                @Override
+                public Thread newThread(final Runnable runnable) {
+                    final Thread thread = new Thread(runnable, "MineUtil-Discord");
+                    thread.setDaemon(true);
+                    thread.setPriority(Thread.MIN_PRIORITY);
+                    return thread;
+                }
+            },
+            new ThreadPoolExecutor.DiscardOldestPolicy()
+    );
+
+    private Discord() {
+    }
+
+    public static void write(final String hook, final String title, final String message, final Color color) {
+        final DiscordWebhook webhook = createWebhook(hook, title, message, color);
+        if (webhook != null) {
+            executeAsync(webhook);
+        }
+    }
+
+    public static void write(final String hook, final String title, final String message,
+                             final UUID uuid, final Color color) {
+        final DiscordWebhook webhook = createWebhook(hook, title, message, color);
+        if (webhook == null) {
+            return;
+        }
+
+        if (uuid != null) {
+            webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                    .setTitle(title)
+                    .setDescription(message)
+                    .setColor(color)
+                    .addField("Date", getFormat("dd.MM.yyyy"), true)
+                    .addField("Time", getFormat("HH:mm:ss"), true)
+                    .setThumbnail("https://laby.net/texture/profile/head/" + uuid + ".png?size=50&overlay"));
+        }
+        executeAsync(webhook);
+    }
+
+    private static DiscordWebhook createWebhook(final String hook, final String title,
+                                                 final String message, final Color color) {
+        if (hook == null) {
+            return null;
+        }
+
+        final String trimmedHook = hook.trim();
+        if (trimmedHook.isEmpty() || "null".equalsIgnoreCase(trimmedHook)) {
+            return null;
+        }
+
+        final DiscordWebhook webhook = new DiscordWebhook(trimmedHook);
+        webhook.setUsername("MineUtil");
+        webhook.setTts(false);
+        webhook.addEmbed(new DiscordWebhook.EmbedObject()
+                .setTitle(title == null ? "MineUtil" : title)
+                .setDescription(message == null ? "" : message)
+                .setColor(color == null ? Color.WHITE : color)
+                .addField("Date", getFormat("dd.MM.yyyy"), true)
+                .addField("Time", getFormat("HH:mm:ss"), true));
+        return webhook;
+    }
+
+    private static void executeAsync(final DiscordWebhook webhook) {
+        EXECUTOR.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    webhook.execute();
+                } catch (final IOException | RuntimeException exception) {
+                    System.err.println("[MineUtil] Discord webhook delivery failed: " + exception.getMessage());
+                }
+            }
+        });
+    }
+
+    private static String getFormat(final String format) {
+        final DateFormat dateFormat = new SimpleDateFormat(format, Locale.GERMANY);
+        return dateFormat.format(new Date());
+    }
 }
