@@ -31,8 +31,7 @@ public final class CitybuildAutoJoinModule implements UtilCore {
                 if (unformatted.contains("[GrieferGames] Du bist im Portalraum. Wähle deinen Citybuild aus.")) {
                     startAutoJoin();
                 } else if (unformatted.contains("[Switcher] Lade Daten herunter!")) {
-                    cancelAutoJoin();
-                    releaseMovementKeys();
+                    shutdown();
                 }
                 return false;
             }
@@ -71,14 +70,18 @@ public final class CitybuildAutoJoinModule implements UtilCore {
                             }
 
                             if (currentSecond <= 0) {
-                                cancelAutoJoin();
-                                releaseMovementKeys();
+                                shutdown();
                             }
                         }
                     });
                 }
             }, 900L, 900L);
         }
+    }
+
+    public static void shutdown() {
+        cancelAutoJoin();
+        releaseMovementKeys();
     }
 
     private static void cancelAutoJoin() {
