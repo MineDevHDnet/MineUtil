@@ -25,6 +25,13 @@ jobs:
           curl --fail --location --retry 3 --output /tmp/gradle.zip https://services.gradle.org/distributions/gradle-2.14.1-bin.zip
           unzip -q /tmp/gradle.zip -d /tmp
 
+      - name: Reject embedded Discord webhook secrets
+        run: |
+          if grep -R -n -E 'https://(discord\.com|discordapp\.com)/api/webhooks/[0-9]+/' src/main/java; then
+            echo 'A Discord webhook secret is embedded in the source tree.' >&2
+            exit 1
+          fi
+
       - name: Audit LabyMod API surface
         run: grep -Rho '^import net\.labymod[^;]*;' src/main/java | sort -u || true
 
@@ -39,7 +46,7 @@ jobs:
           unzip -p "$JAR" addon.json > /tmp/addon.json
           grep -q '"mainClass"' /tmp/addon.json
           if unzip -l "$JAR" | grep -q 'net/labymod/'; then
-            echo 'LabyMod compile stubs were accidentally packaged.' >&2
+            echo 'LabyMod API classes were accidentally packaged.' >&2
             exit 1
           fi
           sha256sum "$JAR"
