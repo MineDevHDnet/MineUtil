@@ -81,13 +81,13 @@ public class CleanCraftSandGui extends GuiScreen implements UtilCore {
     	/** Cat. Crafting */
     	this.buttonList.add(this.craftSandstoneButton = new ModButton(300, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "Sandstone: OFF"));
     	this.buttonList.add(this.craftSandstoneSlabButton = new ModButton(310, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "SandstoneSlab: OFF"));
-    	this.buttonList.add(this.craftSandstoneStairButton = new ModButton(320, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "§mSandstoneStair§r: OFF"));
+    	this.buttonList.add(this.craftSandstoneStairButton = new ModButton(320, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "SandstoneStair: OFF"));
     	this.buttonList.add(this.craftSmoothSandstoneButton = new ModButton(330, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(5), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "SmoothSandstone: OFF"));
 
     	this.buttonList.add(this.craftChiseledSandstoneButton = new ModButton(340, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ChiseledSandstone: OFF"));
     	this.buttonList.add(this.craftRedSandstoneButton = new ModButton(350, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "RedSandstone: OFF"));
     	this.buttonList.add(this.craftRedSandstoneSlabButton = new ModButton(360, ModButton.API.getButtonXPos(3, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "RedSandstoneSlab: OFF"));
-    	this.buttonList.add(this.craftRedSandstoneStairButton = new ModButton(370, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "§mRedSandstoneStair: OFF"));
+    	this.buttonList.add(this.craftRedSandstoneStairButton = new ModButton(370, ModButton.API.getButtonXPos(4, this.width), ModButton.API.getButtonYPos(6), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "RedSandstoneStair: OFF"));
 
     	this.buttonList.add(this.craftSmoothRedSandstoneButton = new ModButton(380, ModButton.API.getButtonXPos(1, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "SmoothRedSandstone: OFF"));
     	this.buttonList.add(this.craftChiseledRedSandstoneButton = new ModButton(390, ModButton.API.getButtonXPos(2, this.width), ModButton.API.getButtonYPos(7), ModButton.API.getButtonWidth(), ModButton.API.getButtonHeight(), "ChiseledRedSandstone: OFF"));
@@ -163,10 +163,10 @@ public class CleanCraftSandGui extends GuiScreen implements UtilCore {
                     this.setSelection("SandstoneSlab", true);
                 	break;
                 }
-//                case 320: {
-//                    this.setSelection("SandstoneStair", true);
-//                    break;
-//                }
+                case 320: {
+                    this.setSelection("SandstoneStair", true);
+                    break;
+                }
                 case 330: {
                     this.setSelection("SmoothSandstone", true);
                     break;
@@ -183,10 +183,10 @@ public class CleanCraftSandGui extends GuiScreen implements UtilCore {
                     this.setSelection("RedSandstoneSlab", true);
                     break;
                 }
-//                case 370: {
-//                    this.setSelection("RedSandstoneStair", true);
-//                    break;
-//                }
+                case 370: {
+                    this.setSelection("RedSandstoneStair", true);
+                    break;
+                }
                 case 380: {
                     this.setSelection("SmoothRedSandstone", true);
                     break;
