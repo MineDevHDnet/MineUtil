@@ -359,6 +359,13 @@ public class CraftHelper implements UtilCore {
                 time.reset();
             }
         }
+        else if(mineUtil.getCraftSelection().equalsIgnoreCase("SandstoneStair")) {
+            this.craftItem(new Object[] { 0, null, null, 0, 0, null, 0, 0, 0 }, new Object[] { Item.getItemFromBlock(Blocks.sandstone), null, null, Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone), null, Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone) });
+            if(time.hasReached(mineUtil.getSettings().getModCraftDelay()) && result != null && result.getItem().equals(Item.getItemFromBlock(Blocks.sandstone_stairs))) {
+                playerCtrl.windowClick(workbench.windowId, 0, 1, 1, player);
+                time.reset();
+            }
+        }
         else if(mineUtil.getCraftSelection().equalsIgnoreCase("SmoothSandstone")) {
             this.craftItem(new Object[] { 0, 0, null, 0, 0, null, null, null, null }, new Object[] { Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone), null, Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone), null, null, null, null });
             if(time.hasReached(mineUtil.getSettings().getModCraftDelay()) && result != null && result.getItem().equals(Item.getItemFromBlock(Blocks.sandstone)) && result.getMetadata() == 2) {
@@ -383,6 +390,13 @@ public class CraftHelper implements UtilCore {
         else if(mineUtil.getCraftSelection().equalsIgnoreCase("RedSandstone")) {
             this.craftItem(new Object[] { 1, 1, null, 1, 1, null, null, null, null }, new Object[] { Item.getItemFromBlock(Blocks.sand), Item.getItemFromBlock(Blocks.sand), null, Item.getItemFromBlock(Blocks.sand), Item.getItemFromBlock(Blocks.sand), null, null, null, null });
             if(time.hasReached(mineUtil.getSettings().getModCraftDelay()) && result != null && result.getItem().equals(Item.getItemFromBlock(Blocks.red_sandstone)) && result.getMetadata() == 0) {
+                playerCtrl.windowClick(workbench.windowId, 0, 1, 1, player);
+                time.reset();
+            }
+        }
+        else if(mineUtil.getCraftSelection().equalsIgnoreCase("RedSandstoneStair")) {
+            this.craftItem(new Object[] { 0, null, null, 0, 0, null, 0, 0, 0 }, new Object[] { Item.getItemFromBlock(Blocks.red_sandstone), null, null, Item.getItemFromBlock(Blocks.red_sandstone), Item.getItemFromBlock(Blocks.red_sandstone), null, Item.getItemFromBlock(Blocks.red_sandstone), Item.getItemFromBlock(Blocks.red_sandstone), Item.getItemFromBlock(Blocks.red_sandstone) });
+            if(time.hasReached(mineUtil.getSettings().getModCraftDelay()) && result != null && result.getItem().equals(Item.getItemFromBlock(Blocks.red_sandstone_stairs))) {
                 playerCtrl.windowClick(workbench.windowId, 0, 1, 1, player);
                 time.reset();
             }
