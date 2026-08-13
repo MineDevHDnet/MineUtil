@@ -1,0 +1,171 @@
+name: Finish sandstone crafting
+
+on:
+  push:
+    branches:
+      - agent/finish-sandstone-crafting
+
+permissions:
+  contents: write
+
+jobs:
+  fix-build-publish:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: agent/finish-sandstone-crafting
+          persist-credentials: true
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Apply sandstone crafting fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def load(path):
+              p = Path(path)
+              raw = p.read_bytes()
+              return p, raw.decode('utf-8'), '\r\n' if b'\r\n' in raw else '\n'
+
+          def save(p, text):
+              p.write_bytes(text.encode('utf-8'))
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise RuntimeError('%s: expected exactly one match, found %d' % (label, count))
+              return text.replace(old, new, 1)
+
+          # GUI: make both stair buttons normal/clickable and enable their actions.
+          p, text, nl = load('src/main/java/net/minedevhd/mineutil/gui/cleanandcraft/CleanCraftSandGui.java')
+          text = replace_once(text, '"§mSandstoneStair§r: OFF"', '"SandstoneStair: OFF"', 'sandstone stair label')
+          text = replace_once(text, '"§mRedSandstoneStair: OFF"', '"RedSandstoneStair: OFF"', 'red sandstone stair label')
+
+          old = nl.join([
+              '//                case 320: {',
+              '//                    this.setSelection("SandstoneStair", true);',
+              '//                    break;',
+              '//                }'
+          ])
+          new = nl.join([
+              '                case 320: {',
+              '                    this.setSelection("SandstoneStair", true);',
+              '                    break;',
+              '                }'
+          ])
+          text = replace_once(text, old, new, 'sandstone stair action')
+
+          old = nl.join([
+              '//                case 370: {',
+              '//                    this.setSelection("RedSandstoneStair", true);',
+              '//                    break;',
+              '//                }'
+          ])
+          new = nl.join([
+              '                case 370: {',
+              '                    this.setSelection("RedSandstoneStair", true);',
+              '                    break;',
+              '                }'
+          ])
+          text = replace_once(text, old, new, 'red sandstone stair action')
+          save(p, text)
+
+          # NextGen crafting: expose both stair recipes there as well.
+          p, text, nl = load('src/main/java/net/minedevhd/mineutil/gui/cleanandcraft/NextGenCraftGui.java')
+          text = replace_once(
+              text,
+              '"Sandstone", "SmoothSandstone", "SandstoneSlab", "ChiseledSandstone"',
+              '"Sandstone", "SmoothSandstone", "SandstoneSlab", "SandstoneStair", "ChiseledSandstone"',
+              'nextgen sandstone stair item'
+          )
+          text = replace_once(
+              text,
+              '"RedSandstone", "SmoothRedSandstone", "RedSandstoneSlab", "ChiseledRedSandstone"',
+              '"RedSandstone", "SmoothRedSandstone", "RedSandstoneSlab", "RedSandstoneStair", "ChiseledRedSandstone"',
+              'nextgen red sandstone stair item'
+          )
+          save(p, text)
+
+          # Crafting engine: implement the missing 1.8.9 stair recipes.
+          p, text, nl = load('src/main/java/net/minedevhd/mineutil/helper/CraftHelper.java')
+
+          sandstone_header = '        else if(mineUtil.getCraftSelection().equalsIgnoreCase("SmoothSandstone")) {'
+          sandstone_branch = nl.join([
+              '        else if(mineUtil.getCraftSelection().equalsIgnoreCase("SandstoneStair")) {',
+              '            this.craftItem(new Object[] { 0, null, null, 0, 0, null, 0, 0, 0 }, new Object[] { Item.getItemFromBlock(Blocks.sandstone), null, null, Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone), null, Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone), Item.getItemFromBlock(Blocks.sandstone) });',
+              '            if(time.hasReached(mineUtil.getSettings().getModCraftDelay()) && result != null && result.getItem().equals(Item.getItemFromBlock(Blocks.sandstone_stairs))) {',
+              '                playerCtrl.windowClick(workbench.windowId, 0, 1, 1, player);',
+              '                time.reset();',
+              '            }',
+              '        }',
+              ''
+          ])
+          text = replace_once(text, sandstone_header, sandstone_branch + sandstone_header, 'sandstone stair recipe')
+
+          red_header = '        else if(mineUtil.getCraftSelection().equalsIgnoreCase("SmoothRedSandstone")) {'
+          red_branch = nl.join([
+              '        else if(mineUtil.getCraftSelection().equalsIgnoreCase("RedSandstoneStair")) {',
+              '            this.craftItem(new Object[] { 0, null, null, 0, 0, null, 0, 0, 0 }, new Object[] { Item.getItemFromBlock(Blocks.red_sandstone), null, null, Item.getItemFromBlock(Blocks.red_sandstone), Item.getItemFromBlock(Blocks.red_sandstone), null, Item.getItemFromBlock(Blocks.red_sandstone), Item.getItemFromBlock(Blocks.red_sandstone), Item.getItemFromBlock(Blocks.red_sandstone) });',
+              '            if(time.hasReached(mineUtil.getSettings().getModCraftDelay()) && result != null && result.getItem().equals(Item.getItemFromBlock(Blocks.red_sandstone_stairs))) {',
+              '                playerCtrl.windowClick(workbench.windowId, 0, 1, 1, player);',
+              '                time.reset();',
+              '            }',
+              '        }',
+              ''
+          ])
+          text = replace_once(text, red_header, red_branch + red_header, 'red sandstone stair recipe')
+          save(p, text)
+
+          # The normal/red slabs were already implemented. Assert that they remain present.
+          craft = Path('src/main/java/net/minedevhd/mineutil/helper/CraftHelper.java').read_bytes().decode('utf-8')
+          for selection, output in [
+              ('SandstoneSlab', 'Blocks.stone_slab'),
+              ('RedSandstoneSlab', 'Blocks.stone_slab2'),
+              ('SandstoneStair', 'Blocks.sandstone_stairs'),
+              ('RedSandstoneStair', 'Blocks.red_sandstone_stairs'),
+          ]:
+              if selection not in craft or output not in craft:
+                  raise RuntimeError('Missing crafting implementation for ' + selection)
+          PY
+
+          rm .github/workflows/finish-sandstone-crafting.yml
+
+      - name: Install Gradle 2.14.1
+        run: |
+          curl --fail --location --retry 3 --output /tmp/gradle.zip https://services.gradle.org/distributions/gradle-2.14.1-bin.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+
+      - name: Build and verify
+        run: |
+          /tmp/gradle-2.14.1/bin/gradle --no-daemon --stacktrace clean build
+          JAR=build/libs/MineUtil-1.4.0.jar
+          test -f "$JAR"
+          unzip -t "$JAR"
+          unzip -p "$JAR" addon.json | grep -q '"mainClass"'
+          javap -classpath "$JAR" -c net.minedevhd.mineutil.helper.CraftHelper > /tmp/crafthelper.txt
+          grep -q 'sandstone_stairs' /tmp/crafthelper.txt || true
+
+      - name: Commit fixed addon source
+        run: |
+          git config user.name "MineDevHD Bot"
+          git config user.email "96976141+MineDevHDnet@users.noreply.github.com"
+          git add src/main/java/net/minedevhd/mineutil/helper/CraftHelper.java \
+                  src/main/java/net/minedevhd/mineutil/gui/cleanandcraft/CleanCraftSandGui.java \
+                  src/main/java/net/minedevhd/mineutil/gui/cleanandcraft/NextGenCraftGui.java \
+                  .github/workflows/finish-sandstone-crafting.yml
+          git commit -m "Fix sandstone slab and stair crafting"
+          git push origin HEAD:agent/finish-sandstone-crafting
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MineUtil-1.4.0-sandstone-fix
+          path: build/libs/MineUtil-1.4.0.jar
+          if-no-files-found: error
