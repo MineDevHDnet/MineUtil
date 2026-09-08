@@ -1,0 +1,49 @@
+name: Temporary ByteBitShop Build
+on:
+  push:
+    branches: [agent-bytebitshop-build]
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: ${{ !contains(github.event.head_commit.message, '[jar-result]') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore source
+        run: |
+          cat .bytebitshop-build/chunk*.b64 | tr -d '\n\r' | base64 -d > /tmp/ByteBitShop-1.0.1-source.tar.xz
+          echo '29076ac0fdbc6cfb377b7b1877c6c145aa6eb7c059a3d42074c437ca9d8b2e67  /tmp/ByteBitShop-1.0.1-source.tar.xz' | sha256sum -c -
+          mkdir -p /tmp/bytebitshop
+          tar -xJf /tmp/ByteBitShop-1.0.1-source.tar.xz -C /tmp/bytebitshop
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Install Gradle 2.14.1
+        run: |
+          curl --fail --location --retry 3 --output /tmp/gradle.zip https://services.gradle.org/distributions/gradle-2.14.1-bin.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+
+      - name: Build
+        working-directory: /tmp/bytebitshop
+        run: /tmp/gradle-2.14.1/bin/gradle --no-daemon --stacktrace clean build
+
+      - name: Verify and publish JAR
+        run: |
+          JAR=/tmp/bytebitshop/build/libs/ByteBitShop-1.0.1.jar
+          test -f "$JAR"
+          unzip -t "$JAR"
+          unzip -l "$JAR" | grep 'net/minedevhd/bytebitshop/ByteBitShopCore.class'
+          cp "$JAR" ByteBitShop-1.0.1.jar
+          sha256sum ByteBitShop-1.0.1.jar | tee ByteBitShop-1.0.1.sha256
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ByteBitShop-1.0.1.jar ByteBitShop-1.0.1.sha256
+          git commit -m '[jar-result] ByteBitShop 1.0.1'
+          git push origin HEAD:agent-bytebitshop-build
